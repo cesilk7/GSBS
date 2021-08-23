@@ -1,2 +1,8 @@
 
+# python
 __init__.py
+
+# db
+postgresql/data/*
+
+.env
