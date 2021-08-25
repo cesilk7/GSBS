@@ -3,12 +3,15 @@ version: '3.8'
 services:
   backend:
     build: ./backend
+    environment:
+      - USE_PTVSD
     command: ['python', 'manage.py', 'runserver', '0.0.0.0:8000']
     volumes:
       - ./backend:/code/
     tty: true
     ports:
       - '8000:8000'
+      - '8888:8888'
     depends_on:
       - db
   db:
