@@ -1,6 +1,7 @@
 
 # python
 __init__.py
+media
 
 # db
 postgresql/data/*
