@@ -3,6 +3,9 @@
 __init__.py
 media
 
+# react
+node_modules
+
 # db
 postgresql/data/*
 

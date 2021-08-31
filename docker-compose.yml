@@ -26,3 +26,12 @@ services:
     volumes:
       - ./postgresql/data:/var/lib/postgresql/data
       - ./postgresql/initdb:/docker-entrypoint-initdb.d
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app/frontend
+      - ./frontend/node_modules:/app/frontend/node_modules
+    tty: true
+    ports:
+      - '3000:3000'
+    command: ['npm', 'start']
