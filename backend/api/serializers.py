@@ -30,13 +30,13 @@ class FoodSerializer(serializers.ModelSerializer):
 
 
 class DiarySerializer(serializers.ModelSerializer):
-    wake_up_time = serializers.TimeField(format='%H:%M')
-    bedtime = serializers.TimeField(format='%H:%M')
+    wake_up_time = ('', serializers.TimeField(format='%H:%M'))
+    bedtime = ('', serializers.TimeField(format='%H:%M'))
 
     class Meta:
         model = Diary
         fields = ['id', 'user', 'date', 'wake_up_time', 'bedtime', 'morning_weight',
-                  'night_weight', 'ate_food', 'comment']
+                 'night_weight', 'ate_food', 'comment']
         extra_kwargs = {'user': {'read_only': True}}
 
     def create(self, validated_data):
