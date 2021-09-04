@@ -2,6 +2,7 @@
 # python
 __init__.py
 media
+static
 
 # react
 node_modules
