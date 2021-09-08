@@ -18,6 +18,8 @@ import {
   resetOpenSignUp,
   fetchAsyncRegister,
   fetchAsyncLogin,
+  fetchAsyncCreateProf,
+  fetchAsyncGetMyProf,
 } from "./authSlice";
 import styles from './Auth.module.css';
 
@@ -61,6 +63,9 @@ const Auth: React.FC = () => {
             const result = await dispatch(fetchAsyncRegister(values));
             if (fetchAsyncRegister.fulfilled.match(result)) {
               await dispatch(fetchAsyncLogin(values));
+              await dispatch(fetchAsyncCreateProf({ username: 'anonymous' }));
+
+              await dispatch(fetchAsyncGetMyProf());
             }
             await dispatch(fetchCredEnd());
             await dispatch(resetOpenSignUp());
@@ -92,7 +97,7 @@ const Auth: React.FC = () => {
                 <br />
                 {formik.touched.email && formik.errors.email ? (
                   <div className={styles.auth_error}>{formik.errors.email}</div>
-                ) : null}
+                ) : <div className={styles.auth_error} />}
 
                 <TextField
                   placeholder='password'
@@ -105,7 +110,7 @@ const Auth: React.FC = () => {
                 <br />
                 {formik.touched.password && formik.errors.password ? (
                   <div className={styles.auth_error}>{formik.errors.password}</div>
-                ) : null}
+                ) : <div className={styles.auth_error} />}
                 <br />
 
                 <Button
@@ -148,7 +153,7 @@ const Auth: React.FC = () => {
             const result = await dispatch(fetchAsyncLogin(values));
 
             if (fetchAsyncLogin.fulfilled.match(result)) {
-              console.log('login is success')
+              await dispatch(fetchAsyncGetMyProf());
             }
             await dispatch(fetchCredEnd());
             await dispatch(resetOpenSignIn());
@@ -180,7 +185,7 @@ const Auth: React.FC = () => {
                 <br />
                 {formik.touched.email && formik.errors.email ? (
                   <div className={styles.auth_error}>{formik.errors.email}</div>
-                ) : null}
+                ) : <div className={styles.auth_error} />}
 
                 <TextField
                   placeholder='password'
@@ -193,7 +198,7 @@ const Auth: React.FC = () => {
                 <br />
                 {formik.touched.password && formik.errors.password ? (
                   <div className={styles.auth_error}>{formik.errors.password}</div>
-                ) : null}
+                ) : <div className={styles.auth_error} />}
                 <br />
 
                 <Button

@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Auth from './features/auth/Auth';
 import './App.module.css';
+import Home from './features/home/Home';
 
 function App() {
   return (
     <div>
-      <Auth />
+      <Home />
     </div>
   );
 }
