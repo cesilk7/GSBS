@@ -29,7 +29,9 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
+
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Profile)
-admin.site.register(models.Food)
+admin.site.register(models.Company)
+admin.site.register(models.Meal)
 admin.site.register(models.Diary)

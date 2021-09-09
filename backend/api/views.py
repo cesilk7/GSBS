@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.permissions import AllowAny
 from . import serializers
-from .models import Profile, Food, Diary
+from .models import Profile, Company, Meal, Diary
 
 
 def test(request):
@@ -32,9 +32,14 @@ class MyProfileListView(generics.ListAPIView):
         return self.queryset.filter(user=self.request.user)
 
 
-class FoodViewSet(viewsets.ModelViewSet):
-    queryset = Food.objects.all()
-    serializer_class = serializers.FoodSerializer
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = serializers.CompanySerializer
+
+
+class MealViewSet(viewsets.ModelViewSet):
+    queryset = Meal.objects.all()
+    serializer_class = serializers.MealSerializer
 
 
 class DiaryViewSet(viewsets.ModelViewSet):

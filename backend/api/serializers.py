@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Profile, Food, Diary
+from .models import Profile, Company, Meal, Diary
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,7 +15,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    created_on = serializers.DateTimeField(format='%Y-%m-%d %H:%M', read_only=True)
+    created_on = serializers.DateTimeField(format='%Y-%m-%d %H:%M',
+                                           read_only=True)
 
     class Meta:
         model = Profile
@@ -23,10 +24,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         extra_kwargs = {'user': {'read_only': True}}
 
 
-class FoodSerializer(serializers.ModelSerializer):
+class CompanySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Food
-        fields = ['id', 'name', 'kcal', 'is_bad']
+        model = Company
+        fields = ['id', 'name']
+
+
+class MealSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meal
+        fields = ['id', 'company', 'name', 'price', 'calorie', 'protein',
+                  'carbohydrate', 'sugar', 'lipid', 'dietary_fiber', 'salt',
+                  'is_bad']
 
 
 class DiarySerializer(serializers.ModelSerializer):
@@ -35,8 +44,9 @@ class DiarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Diary
-        fields = ['id', 'user', 'date', 'wake_up_time', 'bedtime', 'morning_weight',
-                 'night_weight', 'ate_food', 'comment']
+        fields = ['id', 'user', 'date', 'wake_up_time', 'bedtime',
+                  'morning_weight',
+                  'night_weight', 'ate_meal', 'comment']
         extra_kwargs = {'user': {'read_only': True}}
 
     def create(self, validated_data):

@@ -1,0 +1,38 @@
+[
+    {
+        "model": "api.meal",
+        "pk": 1,
+        "fields": {
+            "id": 1,
+            "company": 1,
+            "name": "チキンとトロトロ卵のデミ",
+            "price": null,
+            "calorie": 499,
+            "protein": 29.2,
+            "carbohydrate": 32.8,
+            "sugar": 28.7,
+            "lipid": 36.7,
+            "dietary_fiber": 4.1,
+            "salt": 2.4,
+            "is_bad": false
+        }
+    },
+    {
+        "model": "api.meal",
+        "pk": 2,
+        "fields": {
+            "id": 4,
+            "company": 2,
+            "name": "ＰＡＲＭ チョコレート",
+            "price": 140,
+            "calorie": 237,
+            "protein": 2.7,
+            "carbohydrate": 21.4,
+            "sugar": null,
+            "lipid": 15.6,
+            "dietary_fiber": null,
+            "salt": 0.08,
+            "is_bad": true
+        }
+    }
+]
