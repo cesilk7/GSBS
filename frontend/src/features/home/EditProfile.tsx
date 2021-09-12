@@ -59,8 +59,8 @@ const EditProfile: React.FC = () => {
         }}
         style={customStyles}
       >
-        <form className={styles.home_profile}>
-          <h1 className={styles.home_title}>life management</h1>
+        <form className={styles.home__profile}>
+          <h1 className={styles.home__title}>life management</h1>
           <br />
           <TextField
             placeholder='username'

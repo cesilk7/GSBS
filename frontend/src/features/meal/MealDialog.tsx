@@ -8,7 +8,8 @@ import {
   resetOpenDeleteDialog,
   selectOpenUpdateDialog,
   resetOpenUpdateDialog,
-  selectSelectedRowIds
+  selectSelectedRowIds,
+  fetchAsyncDeleteMeal,
 } from "./mealSlice";
 
 export const MealDeleteDialog: React.FC = () => {
@@ -49,6 +50,7 @@ export const MealDeleteDialog: React.FC = () => {
           <Button
             color="primary"
             onClick={async () => {
+              await dispatch(fetchAsyncDeleteMeal(selectedRowIds));
               await dispatch(resetOpenDeleteDialog());
             }}
             autoFocus

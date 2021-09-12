@@ -3,17 +3,39 @@ export interface File extends Blob {
   readonly name: string;
 }
 /* authSlice.tsx */
+export interface JWT {
+  refresh: string;
+  access: string;
+}
 export interface AUTHENTIC {
   email: string;
   password: string;
 }
-export interface PROFILE {
+export interface POST_PROFILE {
   id: number;
   username: string;
   img: File | null;
 }
+export interface MY_PROFILE {
+  id: number;
+  username: string;
+  user: number;
+  created_on: string;
+  img: string;
+}
+export interface USER {
+  id: number;
+  email: string;
+}
 export interface USERNAME {
   username: string;
+}
+export interface AUTH_STATE {
+  openSignIn: boolean;
+  openSignUp: boolean;
+  openProfile: boolean;
+  isLoadingAuth: boolean;
+  myProfile: MY_PROFILE;
 }
 /* mealSlice.tsx */
 export interface MEAL {

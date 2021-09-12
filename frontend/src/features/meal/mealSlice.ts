@@ -7,14 +7,29 @@ import {GridSelectionModel} from "@mui/x-data-grid";
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
 
-export const fetchAsyncGetMeal = createAsyncThunk(
+export const fetchAsyncGetMeals = createAsyncThunk(
   'meal/getMeal',
   async () => {
-    const res = await axios.get(`${apiUrl}api/meal/`, {
+    const res = await axios.get<MEAL[]>(`${apiUrl}api/meal/`, {
       headers: {
         Authorization: `JWT ${localStorage.localJWT}`,
       },
     });
+    return res.data;
+  }
+);
+
+export const fetchAsyncDeleteMeal = createAsyncThunk(
+  'meal/deleteMeal',
+  async (ids: number[]) => {
+    const res = await axios.put<number[]>(`${apiUrl}api/meal/partial_delete/`,
+      ids,
+      {
+        headers: {
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
     return res.data;
   }
 );
@@ -65,12 +80,14 @@ export const mealSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAsyncGetMeal.fulfilled,
+    builder.addCase(fetchAsyncGetMeals.fulfilled,
       (state, action: PayloadAction<MEAL[]>) => {
-        return {
-          ...state,
-          meals: action.payload,
-        };
+        state.meals = action.payload;
+      }
+    );
+    builder.addCase(fetchAsyncDeleteMeal.fulfilled,
+      (state, action: PayloadAction<number[]>) => {
+        state.meals = state.meals.filter((m) => !action.payload.includes(m.id))
       }
     );
   }

@@ -1,14 +1,22 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import axios from 'axios';
-import { AUTHENTIC, PROFILE, USERNAME } from '../types';
+import {
+  JWT,
+  AUTHENTIC,
+  POST_PROFILE,
+  USER,
+  USERNAME,
+  MY_PROFILE,
+  AUTH_STATE,
+} from '../types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
 
 export const fetchAsyncRegister = createAsyncThunk(
   'auth/register',
   async (authentic: AUTHENTIC) => {
-    const res = await axios.post(`${apiUrl}api/register/`, authentic, {
+    const res = await axios.post<USER>(`${apiUrl}api/register/`, authentic, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -20,7 +28,7 @@ export const fetchAsyncRegister = createAsyncThunk(
 export const fetchAsyncLogin = createAsyncThunk(
   'auth/post',
   async (authentic: AUTHENTIC) => {
-    const res = await axios.post(`${apiUrl}authen/jwt/create`, authentic, {
+    const res = await axios.post<JWT>(`${apiUrl}authen/jwt/create`, authentic, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -32,7 +40,7 @@ export const fetchAsyncLogin = createAsyncThunk(
 export const fetchAsyncGetMyProf = createAsyncThunk(
   'profile/get',
   async () => {
-    const res = await axios.get(`${apiUrl}api/myprofile/`, {
+    const res = await axios.get<MY_PROFILE[]>(`${apiUrl}api/myprofile/`, {
       headers: {
         Authorization: `JWT ${localStorage.localJWT}`,
       },
@@ -44,7 +52,7 @@ export const fetchAsyncGetMyProf = createAsyncThunk(
 export const fetchAsyncCreateProf = createAsyncThunk(
   'profile/post',
   async (username: USERNAME) => {
-    const res = await axios.post(`${apiUrl}api/profile/`, username, {
+    const res = await axios.post<MY_PROFILE>(`${apiUrl}api/profile/`, username, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `JWT ${localStorage.localJWT}`,
@@ -56,11 +64,11 @@ export const fetchAsyncCreateProf = createAsyncThunk(
 
 export const fetchAsyncUpdateProf = createAsyncThunk(
   'profile/put',
-  async (profile: PROFILE) => {
+  async (profile: POST_PROFILE) => {
     const uploadData = new FormData();
     uploadData.append('username', profile.username);
     profile.img && uploadData.append('img', profile.img, profile.img.name);
-    const res = await axios.put(`${apiUrl}api/profile/${profile.id}/`, uploadData, {
+    const res = await axios.put<MY_PROFILE>(`${apiUrl}api/profile/${profile.id}/`, uploadData, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `JWT ${localStorage.localJWT}`,
@@ -70,21 +78,23 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
   }
 );
 
+export const initialState: AUTH_STATE = {
+  openSignIn: true,
+  openSignUp: false,
+  openProfile: false,
+  isLoadingAuth: false,
+  myProfile: {
+    id: 0,
+    username: '',
+    user: 0,
+    created_on: '',
+    img: '',
+  },
+};
+
 export const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    openSignIn: true,
-    openSignUp: false,
-    openProfile: false,
-    isLoadingAuth: false,
-    myProfile: {
-      id: 0,
-      username: '',
-      user: 0,
-      created_on: '',
-      img: '',
-    },
-  },
+  initialState,
   reducers: {
     fetchCredStart(state) {
       state.isLoadingAuth = true;
@@ -110,20 +120,26 @@ export const authSlice = createSlice({
     resetOpenProfile(state) {
       state.openProfile = false;
     },
-    editUsername(state, action) {
+    editUsername(state, action: PayloadAction<string>) {
       state.myProfile.username = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchAsyncLogin.fulfilled, (state, action) => {
-      localStorage.setItem('localJWT', action.payload.access);
-    });
-    builder.addCase(fetchAsyncGetMyProf.fulfilled, (state, action) => {
-      state.myProfile = action.payload;
-    });
-    builder.addCase(fetchAsyncUpdateProf.fulfilled, (state, action) => {
-      state.myProfile = action.payload;
-    });
+    builder.addCase(fetchAsyncLogin.fulfilled,
+      (state, action: PayloadAction<JWT>) => {
+        localStorage.setItem('localJWT', action.payload.access);
+      }
+    );
+    builder.addCase(fetchAsyncGetMyProf.fulfilled,
+      (state, action: PayloadAction<MY_PROFILE>) => {
+        state.myProfile = action.payload;
+      }
+    );
+    builder.addCase(fetchAsyncUpdateProf.fulfilled,
+      (state, action: PayloadAction<MY_PROFILE>) => {
+        state.myProfile = action.payload;
+      }
+    );
   },
 });
 

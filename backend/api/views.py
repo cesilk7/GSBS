@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from rest_framework import generics
-from rest_framework import viewsets
+from rest_framework import generics, viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.permissions import AllowAny
 from . import serializers
@@ -40,6 +41,20 @@ class CompanyViewSet(viewsets.ModelViewSet):
 class MealViewSet(viewsets.ModelViewSet):
     queryset = Meal.objects.all()
     serializer_class = serializers.MealSerializer
+
+    @action(detail=False, methods=['put'])
+    def partial_delete(self, request):
+        ids = request.data
+        meals = Meal.objects.filter(id__in=ids)
+        if meals:
+            meals.delete()
+            return Response(ids)
+        return Response([0])
+
+    def destroy(self, request, *args, **kwargs):
+        response = {
+            'message': 'DELETE method of single model instance is not allowed'}
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DiaryViewSet(viewsets.ModelViewSet):

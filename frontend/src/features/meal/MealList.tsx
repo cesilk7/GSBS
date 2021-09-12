@@ -11,7 +11,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
 import { MEAL } from '../types';
 import {
-  fetchAsyncGetMeal,
+  fetchAsyncGetMeals,
   initialState,
   selectMeals,
   setOpenDeleteDialog,
@@ -53,7 +53,7 @@ const MealList: React.FC = () => {
   const meals = useAppSelector(selectMeals);
 
   useEffect(() => {
-    dispatch(fetchAsyncGetMeal());
+    dispatch(fetchAsyncGetMeals());
   }, [dispatch]);
 
   return (
@@ -84,7 +84,7 @@ const MealList: React.FC = () => {
           await dispatch(setOpenDeleteDialog());
         }}
       >
-        all delete
+        partial delete
       </Button>
       <Button
         className={classes.button}
@@ -95,7 +95,7 @@ const MealList: React.FC = () => {
           await dispatch(setOpenUpdateDialog());
         }}
       >
-        all update
+        partial update
       </Button>
       <Button
         className={classes.button}
