@@ -7,7 +7,12 @@ from django.conf import settings
 
 def upload_avatar_path(instance, filename):
     ext = filename.split('.')[-1]
-    return '/'.join(['avatars', str(instance.user.id)+str(instance.username)+str()+str(ext)])
+    return '/'.join(['avatars', str(instance.user.id)+str(instance.username)+'.'+str(ext)])
+
+
+def upload_meal_path(instance, filename):
+    ext = filename.split('.')[-1]
+    return '/'.join(['meal', str(instance.meal.id)+str(instance.name)+'.'+str(ext)])
 
 
 class UserManager(BaseUserManager):
@@ -87,6 +92,8 @@ class Meal(models.Model):
     dietary_fiber = models.FloatField(blank=True, null=True)
     salt = models.FloatField(blank=True, null=True)
     is_bad = models.BooleanField()
+    url = models.CharField(max_length=256, default='')
+    img = models.ImageField(blank=True, null=True, upload_to=upload_meal_path)
 
     def __str__(self):
         return self.company.name + ' ' + self.name

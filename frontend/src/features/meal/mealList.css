@@ -1,0 +1,6 @@
+svg.update_icon {
+    font-size: 15px !important;
+}
+svg.update_icon > path {
+    stroke: #ffffff;
+}

@@ -1,8 +1,8 @@
-.home_logout {
+.home__logout {
     display: flex;
     justify-content: flex-end;
 }
-.home_btnModal {
+.home__btnModal {
     background-color: transparent;
     color: gray;
     padding-top: 3px;
@@ -11,14 +11,14 @@
     outline: none;
     cursor: pointer;
 }
-.home_drawer {
+.home__drawer {
     background-color: cyan;
 }
-.home_profile {
+.home__profile {
     display: flex;
     flex-direction: column;
 }
-.home_title {
+.home__title {
     font-family: 'Luckiest Guy', cursive;
     font-weight: normal;
     text-align: center;

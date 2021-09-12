@@ -1,23 +1,23 @@
-.auth_signUp {
+.auth__signUp {
     display: flex;
     flex-direction: column;
 }
-.auth_error {
+.auth__error {
     color: #ff00ff;
     text-align: center;
     margin: 10px;
 }
-.auth_title {
+.auth__title {
     font-family: 'Luckiest Guy', cursive;
     font-weight: normal;
     text-align: center;
 }
-.auth_progress {
+.auth__progress {
     margin-top: 15px;
     display: flex;
     justify-content: center;
 }
-.auth_text {
+.auth__text {
     color: rgb(6, 153, 211);
     text-align: center;
     cursor: pointer;

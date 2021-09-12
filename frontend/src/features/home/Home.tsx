@@ -11,9 +11,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import CreateIcon from '@material-ui/icons/Create';
+import FastFoodIcon from '@material-ui/icons/Fastfood';
 
 import Auth from '../auth/Auth';
 import EditProfile from '../home/EditProfile';
+import MealList from '../meal/MealList';
 import {
   selectMyProfile,
   selectIsLoadingAuth,
@@ -72,7 +75,23 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(0, 1),
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
-      justifyContent: 'flex-start',
+      justifyContent: 'flex-end',
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: -drawerWidth,
+    },
+    contentShift: {
+      transition: theme.transitions.create('margin', {
+        easing: theme.transitions.easing.easeOut,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      marginLeft: 0,
     },
   }),
 );
@@ -113,6 +132,7 @@ const Home: React.FC = () => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const [openMeal, setOpenMeal] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -136,7 +156,7 @@ const Home: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <div className={classes.root}>
       <Auth />
       <EditProfile />
       <AppBar
@@ -161,7 +181,7 @@ const Home: React.FC = () => {
           </Typography>
           {profile?.username ? (
             <>
-              <div className={styles.home_logout}>
+              <div className={styles.home__logout}>
                 { isLoadingAuth && <CircularProgress /> }
                 <Button
                   color='inherit'
@@ -176,13 +196,13 @@ const Home: React.FC = () => {
                   Logout
                 </Button>
                 <button
-                  className={styles.home_btnModal}
+                  className={styles.home__btnModal}
                   onClick={() => {
                     dispatch(setOpenProfile());
                   }}
                 >
                   <StyledBadge
-                    overlap="circle"
+                    overlap="circular"
                     anchorOrigin={{
                       vertical: "bottom",
                       horizontal: "right",
@@ -234,12 +254,14 @@ const Home: React.FC = () => {
         </div>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button key={'Diary'}>
+            <ListItemIcon><CreateIcon /></ListItemIcon>
+            <ListItemText primary='Diary' />
+          </ListItem>
+          <ListItem button key={'Meal'} onClick={() => {setOpenMeal(true)}}>
+            <ListItemIcon><FastFoodIcon /></ListItemIcon>
+            <ListItemText primary='Meal' />
+          </ListItem>
         </List>
         <Divider />
         <List>
@@ -251,7 +273,15 @@ const Home: React.FC = () => {
           ))}
         </List>
       </Drawer>
-    </>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+      >
+        <div className={classes.drawerHeader} />
+        {openMeal && <MealList />}
+      </main>
+    </div>
   )
 }
 

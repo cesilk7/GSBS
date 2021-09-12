@@ -31,11 +31,14 @@ class CompanySerializer(serializers.ModelSerializer):
 
 
 class MealSerializer(serializers.ModelSerializer):
+    company_name = serializers.ReadOnlyField(source='company.name',
+                                             read_only=True)
+
     class Meta:
         model = Meal
-        fields = ['id', 'company', 'name', 'price', 'calorie', 'protein',
-                  'carbohydrate', 'sugar', 'lipid', 'dietary_fiber', 'salt',
-                  'is_bad']
+        fields = ['id', 'company', 'company_name', 'name', 'price', 'calorie',
+                  'protein', 'carbohydrate', 'sugar', 'lipid', 'dietary_fiber',
+                  'salt', 'is_bad', 'url', 'img']
 
 
 class DiarySerializer(serializers.ModelSerializer):

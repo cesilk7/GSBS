@@ -32,7 +32,7 @@ const modalStyle = {
     left: "50%",
 
     width: 300,
-    height: 370,
+    height: 380,
     padding: "50px",
 
     transform: "translate(-50%, -50%)",
@@ -78,10 +78,10 @@ const Auth: React.FC = () => {
         >
           {formik => (
             <form onSubmit={formik.handleSubmit}>
-              <div className={styles.auth_signUp}>
-                <h1 className={styles.auth_title}>life management</h1>
+              <div className={styles.auth__signUp}>
+                <h1 className={styles.auth__title}>life management</h1>
                 <br />
-                <div className={styles.auth_progress}>
+                <div className={styles.auth__progress}>
                   {isLoadingAuth && <CircularProgress />}
                 </div>
                 <br />
@@ -96,8 +96,8 @@ const Auth: React.FC = () => {
                 />
                 <br />
                 {formik.touched.email && formik.errors.email ? (
-                  <div className={styles.auth_error}>{formik.errors.email}</div>
-                ) : <div className={styles.auth_error} />}
+                  <div className={styles.auth__error}>{formik.errors.email}</div>
+                ) : <div className={styles.auth__error} />}
 
                 <TextField
                   placeholder='password'
@@ -109,8 +109,8 @@ const Auth: React.FC = () => {
                 />
                 <br />
                 {formik.touched.password && formik.errors.password ? (
-                  <div className={styles.auth_error}>{formik.errors.password}</div>
-                ) : <div className={styles.auth_error} />}
+                  <div className={styles.auth__error}>{formik.errors.password}</div>
+                ) : <div className={styles.auth__error} />}
                 <br />
 
                 <Button
@@ -124,7 +124,7 @@ const Auth: React.FC = () => {
                 <br />
                 <br />
                 <span
-                  className={styles.auth_text}
+                  className={styles.auth__text}
                   onClick={async () => {
                     await dispatch(setOpenSignIn());
                     await dispatch(resetOpenSignUp());
@@ -166,10 +166,10 @@ const Auth: React.FC = () => {
         >
           {formik => (
             <form onSubmit={formik.handleSubmit}>
-              <div className={styles.auth_signUp}>
-                <h1 className={styles.auth_title}>life management</h1>
+              <div className={styles.auth__signUp}>
+                <h1 className={styles.auth__title}>life management</h1>
                 <br />
-                <div className={styles.auth_progress}>
+                <div className={styles.auth__progress}>
                   {isLoadingAuth && <CircularProgress />}
                 </div>
                 <br />
@@ -184,8 +184,8 @@ const Auth: React.FC = () => {
                 />
                 <br />
                 {formik.touched.email && formik.errors.email ? (
-                  <div className={styles.auth_error}>{formik.errors.email}</div>
-                ) : <div className={styles.auth_error} />}
+                  <div className={styles.auth__error}>{formik.errors.email}</div>
+                ) : <div className={styles.auth__error} />}
 
                 <TextField
                   placeholder='password'
@@ -197,8 +197,8 @@ const Auth: React.FC = () => {
                 />
                 <br />
                 {formik.touched.password && formik.errors.password ? (
-                  <div className={styles.auth_error}>{formik.errors.password}</div>
-                ) : <div className={styles.auth_error} />}
+                  <div className={styles.auth__error}>{formik.errors.password}</div>
+                ) : <div className={styles.auth__error} />}
                 <br />
 
                 <Button
@@ -212,7 +212,7 @@ const Auth: React.FC = () => {
                 <br />
                 <br />
                 <span
-                  className={styles.auth_text}
+                  className={styles.auth__text}
                   onClick={async () => {
                     await dispatch(resetOpenSignIn());
                     await dispatch(setOpenSignUp());
