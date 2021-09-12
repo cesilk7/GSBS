@@ -22,7 +22,7 @@ export const fetchAsyncGetMeals = createAsyncThunk(
 export const fetchAsyncDeleteMeal = createAsyncThunk(
   'meal/deleteMeal',
   async (ids: number[]) => {
-    const res = await axios.put<number[]>(`${apiUrl}api/meal/partial_delete/`,
+    const res = await axios.put<number[]>(`${apiUrl}api/meal/multiple_delete/`,
       ids,
       {
         headers: {

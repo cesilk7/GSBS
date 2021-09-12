@@ -43,7 +43,11 @@ class MealViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.MealSerializer
 
     @action(detail=False, methods=['put'])
-    def partial_delete(self, request):
+    def multiple_update(self, request):
+        pass
+
+    @action(detail=False, methods=['put'])
+    def multiple_delete(self, request):
         ids = request.data
         meals = Meal.objects.filter(id__in=ids)
         if meals:

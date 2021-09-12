@@ -55,6 +55,14 @@ export interface MEAL {
   url: string;
   img: File | null;
 }
+export interface POST_MULTIPLE_UPDATE {
+  id: number;
+  company: number;
+  price: number;
+  calorie: number;
+  protein: number;
+  sugar: number;
+}
 export interface MEAL_STATE {
   openDeleteDialog: boolean;
   openUpdateDialog: boolean;

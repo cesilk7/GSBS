@@ -34,7 +34,7 @@ const columns: GridColDef[] = [
   { field: 'Edit', sortable: false, width: 110,
     renderCell: (params) => (
       <Button variant="contained" color="primary">
-        Edit {params.id}
+        Edit
       </Button>
     )
   },
@@ -84,7 +84,7 @@ const MealList: React.FC = () => {
           await dispatch(setOpenDeleteDialog());
         }}
       >
-        partial delete
+        delete
       </Button>
       <Button
         className={classes.button}
@@ -95,7 +95,7 @@ const MealList: React.FC = () => {
           await dispatch(setOpenUpdateDialog());
         }}
       >
-        partial update
+        update
       </Button>
       <Button
         className={classes.button}
