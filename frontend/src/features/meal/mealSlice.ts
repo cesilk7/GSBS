@@ -2,8 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import axios from 'axios';
 
-import { MEAL, MEAL_STATE } from '../types';
-import {GridSelectionModel} from "@mui/x-data-grid";
+import { MEAL, MEAL_STATE, POST_MULTIPLE_UPDATE } from '../types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
 
@@ -19,8 +18,23 @@ export const fetchAsyncGetMeals = createAsyncThunk(
   }
 );
 
-export const fetchAsyncDeleteMeal = createAsyncThunk(
-  'meal/deleteMeal',
+export const fetchAsyncUpdateMeals = createAsyncThunk(
+  'meal/updateMeals',
+  async (meals: POST_MULTIPLE_UPDATE[]) => {
+    const res = await axios.put<MEAL[]>(`${apiUrl}api/meal/multiple_update/`,
+      meals,
+      {
+        headers: {
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const fetchAsyncDeleteMeals = createAsyncThunk(
+  'meal/deleteMeals',
   async (ids: number[]) => {
     const res = await axios.put<number[]>(`${apiUrl}api/meal/multiple_delete/`,
       ids,
@@ -37,6 +51,7 @@ export const fetchAsyncDeleteMeal = createAsyncThunk(
 export const initialState: MEAL_STATE = {
   openDeleteDialog: false,
   openUpdateDialog: false,
+  isLoadingMeal: false,
   selectedRowIds: [],
   meals: [
     {
@@ -63,6 +78,12 @@ export const mealSlice = createSlice({
   name: 'meal',
   initialState,
   reducers: {
+    fetchCredStart(state) {
+      state.isLoadingMeal = true;
+    },
+    fetchCredEnd(state) {
+      state.isLoadingMeal = false;
+    },
     setOpenDeleteDialog(state) {
       state.openDeleteDialog = true;
     },
@@ -77,7 +98,13 @@ export const mealSlice = createSlice({
     },
     setSelectedRowIds(state, action) {
       state.selectedRowIds = action.payload;
-    }
+    },
+    resetSelectedRowIds(state) {
+      state.selectedRowIds = [];
+    },
+    setMeals(state, action) {
+      state.meals = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAsyncGetMeals.fulfilled,
@@ -85,22 +112,32 @@ export const mealSlice = createSlice({
         state.meals = action.payload;
       }
     );
-    builder.addCase(fetchAsyncDeleteMeal.fulfilled,
+    builder.addCase(fetchAsyncDeleteMeals.fulfilled,
       (state, action: PayloadAction<number[]>) => {
         state.meals = state.meals.filter((m) => !action.payload.includes(m.id))
       }
     );
+    // builder.addCase(fetchAsyncUpdateMeals.fulfilled,
+    //   (state, action: PayloadAction<MEAL[]>) => {
+    //
+    //   }
+    // );
   }
 });
 
 export const {
+  fetchCredStart,
+  fetchCredEnd,
   setOpenDeleteDialog,
   resetOpenDeleteDialog,
   setOpenUpdateDialog,
   resetOpenUpdateDialog,
   setSelectedRowIds,
+  resetSelectedRowIds,
+  setMeals,
 } = mealSlice.actions;
 
+export const selectIsLoadingMeal = (state: RootState) => state.meal.isLoadingMeal;
 export const selectOpenDeleteDialog = (state: RootState) => state.meal.openDeleteDialog;
 export const selectOpenUpdateDialog = (state: RootState) => state.meal.openUpdateDialog;
 export const selectSelectedRowIds = (state: RootState) => state.meal.selectedRowIds;

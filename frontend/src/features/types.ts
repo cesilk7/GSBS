@@ -57,7 +57,7 @@ export interface MEAL {
 }
 export interface POST_MULTIPLE_UPDATE {
   id: number;
-  company: number;
+  name: string;
   price: number;
   calorie: number;
   protein: number;
@@ -66,6 +66,7 @@ export interface POST_MULTIPLE_UPDATE {
 export interface MEAL_STATE {
   openDeleteDialog: boolean;
   openUpdateDialog: boolean;
-  selectedRowIds: number[],
+  isLoadingMeal: boolean;
+  selectedRowIds: number[];
   meals: MEAL[];
 }

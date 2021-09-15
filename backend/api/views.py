@@ -39,12 +39,27 @@ class CompanyViewSet(viewsets.ModelViewSet):
 
 
 class MealViewSet(viewsets.ModelViewSet):
-    queryset = Meal.objects.all()
+    queryset = Meal.objects.order_by('id')
     serializer_class = serializers.MealSerializer
 
     @action(detail=False, methods=['put'])
     def multiple_update(self, request):
-        pass
+        rows = request.data
+        ids = [row.get('id') for row in rows]
+        meals = Meal.objects.filter(id__in=ids)
+
+        update_meals = []
+        for i, meal in enumerate(meals):
+            meal.name = rows[i]['name']
+            meal.price = rows[i]['price']
+            meal.calorie = rows[i]['calorie']
+            meal.protein = rows[i]['protein']
+            meal.sugar = rows[i]['sugar']
+            update_meals.append(meal)
+        Meal.objects.bulk_update(
+            update_meals,
+            fields=['name', 'price', 'calorie', 'protein', 'sugar'])
+        return Response(ids)
 
     @action(detail=False, methods=['put'])
     def multiple_delete(self, request):
