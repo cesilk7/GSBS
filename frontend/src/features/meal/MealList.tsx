@@ -9,20 +9,23 @@ import { Button, Grid, Tooltip, IconButton, Avatar, Badge } from '@material-ui/c
 import { DataGrid, GridColDef, GridCellEditCommitParams } from '@mui/x-data-grid';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
-import { MEAL, POST_MULTIPLE_UPDATE } from '../types';
+import { MEAL, PROPS_MULTIPLE_MEALS } from '../types';
 import {
   selectSelectedRowIds,
   selectMeals,
   setOpenDeleteDialog,
   setOpenUpdateDialog,
+  setOpenMealForm,
   setSelectedRowIds,
   setMeals,
   fetchAsyncGetMeals,
+  fetchAsyncGetCompanies,
 } from './mealSlice';
 import styles from './Meal.module.css';
 import './mealList.css';
-import {fetchAsyncGetMyProf} from '../auth/authSlice';
+import {fetchAsyncGetMyProf } from '../auth/authSlice';
 import MealDialog from './MealDialog';
+import MealForm from './MealForm';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', minWidth: 100, headerAlign: 'center', align: 'center' },
@@ -63,20 +66,23 @@ const MealList: React.FC = () => {
         }
         return row;
       });
-      console.log(updateRows);
       dispatch(setMeals(updateRows));
     },
     [meals],
   );
 
   useEffect(() => {
-    dispatch(fetchAsyncGetMeals());
-    console.log('#########');
+    const fetchBootLoader = async () => {
+      await dispatch(fetchAsyncGetMeals());
+      await dispatch(fetchAsyncGetCompanies());
+    }
+    fetchBootLoader();
   }, [dispatch]);
 
   return (
     <>
       <MealDialog />
+      <MealForm />
       <br />
       <Grid
         className={classes.buttonRow}
@@ -122,7 +128,12 @@ const MealList: React.FC = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title='Add' aria-label='add'>
-            <IconButton style={{ color: 'lightblue' }}>
+            <IconButton
+              style={{ color: 'lightblue' }}
+              onClick={async () => {
+                await dispatch(setOpenMealForm());
+              }}
+            >
               <AddIcon style={{ fontSize: 30 }} />
             </IconButton>
           </Tooltip>

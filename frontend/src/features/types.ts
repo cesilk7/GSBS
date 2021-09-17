@@ -11,7 +11,7 @@ export interface AUTHENTIC {
   email: string;
   password: string;
 }
-export interface POST_PROFILE {
+export interface PROPS_PROFILE {
   id: number;
   username: string;
   img: File | null;
@@ -55,7 +55,21 @@ export interface MEAL {
   url: string;
   img: File | null;
 }
-export interface POST_MULTIPLE_UPDATE {
+export interface PROPS_MEAL {
+  id: number;
+  company: number;
+  name: string;
+  price: number;
+  calorie: number;
+  protein: number;
+  carbohydrate: number;
+  sugar: number;
+  lipid: number;
+  dietary_fiber: number;
+  salt: number;
+  is_bad: boolean;
+}
+export interface PROPS_MULTIPLE_MEALS {
   id: number;
   name: string;
   price: number;
@@ -63,10 +77,17 @@ export interface POST_MULTIPLE_UPDATE {
   protein: number;
   sugar: number;
 }
+export interface COMPANY {
+  id: number;
+  name: string;
+}
 export interface MEAL_STATE {
   openDeleteDialog: boolean;
   openUpdateDialog: boolean;
+  openMealForm: boolean;
   isLoadingMeal: boolean;
   selectedRowIds: number[];
   meals: MEAL[];
+  editedMeal: PROPS_MEAL;
+  companies: COMPANY[];
 }

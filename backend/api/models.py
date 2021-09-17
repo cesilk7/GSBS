@@ -82,6 +82,7 @@ class Meal(models.Model):
 
     company = models.ForeignKey(
         Company, related_name='companies', on_delete=models.CASCADE)
+    item_no = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=100, blank=False, null=False)
     price = models.IntegerField(blank=True, null=True)
     calorie = models.IntegerField(blank=True, null=True)
