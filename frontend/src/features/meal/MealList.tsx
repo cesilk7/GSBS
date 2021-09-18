@@ -10,39 +10,23 @@ import { Button, Grid, Tooltip, IconButton, Avatar, Badge } from '@material-ui/c
 import { DataGrid, GridColDef, GridCellEditCommitParams } from '@mui/x-data-grid';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
-import { MEAL, POST_MULTIPLE_UPDATE } from '../types';
+import { MEAL, PROPS_MULTIPLE_MEALS } from '../types';
 import {
   selectSelectedRowIds,
   selectMeals,
   setOpenDeleteDialog,
   setOpenUpdateDialog,
+  setOpenMealForm,
   setSelectedRowIds,
   setMeals,
   fetchAsyncGetMeals,
+  fetchAsyncGetCompanies, setEditedMeal,
 } from './mealSlice';
 import styles from './Meal.module.css';
 import './mealList.css';
-import {fetchAsyncGetMyProf} from '../auth/authSlice';
+import {fetchAsyncGetMyProf } from '../auth/authSlice';
 import MealDialog from './MealDialog';
-
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', minWidth: 100, headerAlign: 'center', align: 'center' },
-  { field: 'company_name', headerName: 'Company', flex: 1, headerAlign: 'center', editable: false },
-  { field: 'name', headerName: 'Meal', flex: 1, headerAlign: 'center', editable: true },
-  { field: 'price', headerName: 'Price', type: 'number', minWidth: 110, headerAlign: 'center', editable: true },
-  { field: 'calorie', headerName: 'Calorie', type: 'number', minWidth: 130, headerAlign: 'center', editable: true },
-  { field: 'protein', headerName: 'Protein', type: 'number', minWidth: 130, headerAlign: 'center', editable: true },
-  { field: 'sugar', headerName: 'Sugar', type: 'number', minWidth: 130, headerAlign: 'center', editable: true },
-  { field: 'Edit', sortable: false, minWidth: 110, headerAlign: 'center', align: 'center',
-    renderCell: (params) => (
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<FiEdit />}
-      />
-    )
-  },
-];
+import MealForm from './MealForm';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonRow: {
@@ -56,6 +40,30 @@ const MealList: React.FC = () => {
   const selectedRowIds = useAppSelector(selectSelectedRowIds);
   const meals = useAppSelector(selectMeals);
 
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', minWidth: 100, headerAlign: 'center', align: 'center' },
+    { field: 'company_name', headerName: 'Company', flex: 1, headerAlign: 'center', editable: false },
+    { field: 'name', headerName: 'Meal', flex: 1, headerAlign: 'center', editable: true },
+    { field: 'price', headerName: 'Price', type: 'number', minWidth: 110, headerAlign: 'center', editable: true },
+    { field: 'calorie', headerName: 'Calorie', type: 'number', minWidth: 130, headerAlign: 'center', editable: true },
+    { field: 'protein', headerName: 'Protein', type: 'number', minWidth: 130, headerAlign: 'center', editable: true },
+    { field: 'sugar', headerName: 'Sugar', type: 'number', minWidth: 130, headerAlign: 'center', editable: true },
+    { field: 'Edit', sortable: false, minWidth: 110, headerAlign: 'center', align: 'center',
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={async () => {
+            console.log(params.row);
+            await dispatch(setEditedMeal(params.row));
+            await dispatch(setOpenMealForm());
+          }}
+          startIcon={<FiEdit />}
+        />
+      )
+    },
+  ];
+
   const handleCellEditCommit = useCallback(
     ({ id, field, value }: GridCellEditCommitParams) => {
       const updateRows = meals.map((row) => {
@@ -64,20 +72,23 @@ const MealList: React.FC = () => {
         }
         return row;
       });
-      console.log(updateRows);
       dispatch(setMeals(updateRows));
     },
     [meals],
   );
 
   useEffect(() => {
-    dispatch(fetchAsyncGetMeals());
-    console.log('#########');
+    const fetchBootLoader = async () => {
+      await dispatch(fetchAsyncGetMeals());
+      await dispatch(fetchAsyncGetCompanies());
+    }
+    fetchBootLoader();
   }, [dispatch]);
 
   return (
     <>
       <MealDialog />
+      <MealForm />
       <br />
       <Grid
         className={classes.buttonRow}
@@ -122,8 +133,14 @@ const MealList: React.FC = () => {
               <UpdateIcon style={{ fontSize: 30 }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title='Add' aria-label='add'>
-            <IconButton style={{ color: 'lightblue' }}>
+          <Tooltip title='Create' aria-label='create'>
+            <IconButton
+              id='createButton'
+              style={{ color: 'lightblue' }}
+              onClick={async () => {
+                await dispatch(setOpenMealForm());
+              }}
+            >
               <AddIcon style={{ fontSize: 30 }} />
             </IconButton>
           </Tooltip>

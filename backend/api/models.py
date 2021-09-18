@@ -82,6 +82,7 @@ class Meal(models.Model):
 
     company = models.ForeignKey(
         Company, related_name='companies', on_delete=models.CASCADE)
+    item_no = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=100, blank=False, null=False)
     price = models.IntegerField(blank=True, null=True)
     calorie = models.IntegerField(blank=True, null=True)
@@ -92,7 +93,7 @@ class Meal(models.Model):
     dietary_fiber = models.FloatField(blank=True, null=True)
     salt = models.FloatField(blank=True, null=True)
     is_bad = models.BooleanField()
-    url = models.CharField(max_length=256, default='')
+    url = models.CharField(max_length=256, default='', blank=True, null=True)
     img = models.ImageField(blank=True, null=True, upload_to=upload_meal_path)
 
     def __str__(self):

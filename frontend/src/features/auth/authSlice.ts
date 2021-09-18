@@ -4,7 +4,7 @@ import axios from 'axios';
 import {
   JWT,
   AUTHENTIC,
-  POST_PROFILE,
+  PROPS_PROFILE,
   USER,
   USERNAME,
   MY_PROFILE,
@@ -64,7 +64,7 @@ export const fetchAsyncCreateProf = createAsyncThunk(
 
 export const fetchAsyncUpdateProf = createAsyncThunk(
   'profile/put',
-  async (profile: POST_PROFILE) => {
+  async (profile: PROPS_PROFILE) => {
     const uploadData = new FormData();
     uploadData.append('username', profile.username);
     profile.img && uploadData.append('img', profile.img, profile.img.name);

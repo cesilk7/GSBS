@@ -44,9 +44,9 @@ class MealViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['put'])
     def multiple_update(self, request):
-        rows = request.data
+        rows = sorted(request.data, key=lambda x: x['id'])
         ids = [row.get('id') for row in rows]
-        meals = Meal.objects.filter(id__in=ids)
+        meals = Meal.objects.filter(id__in=ids).order_by('id')
 
         update_meals = []
         for i, meal in enumerate(meals):
