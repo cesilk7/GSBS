@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import { FaFileUpload, FaFileDownload } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import AddIcon from '@material-ui/icons/Add';
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const MealList: React.FC = () => {
-  const classes = useStyles()
+  const classes = useStyles();
   const dispatch = useAppDispatch();
   const selectedRowIds = useAppSelector(selectSelectedRowIds);
   const meals = useAppSelector(selectMeals);

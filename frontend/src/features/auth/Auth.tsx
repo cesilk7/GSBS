@@ -31,8 +31,8 @@ const modalStyle = {
     top: "50%",
     left: "50%",
 
-    width: 300,
-    height: 380,
+    width: 350,
+    height: 450,
     padding: "50px",
 
     transform: "translate(-50%, -50%)",
@@ -199,8 +199,8 @@ const Auth: React.FC = () => {
                 {formik.touched.password && formik.errors.password ? (
                   <div className={styles.auth__error}>{formik.errors.password}</div>
                 ) : <div className={styles.auth__error} />}
-                <br />
 
+                <br />
                 <Button
                   variant='contained'
                   color='primary'

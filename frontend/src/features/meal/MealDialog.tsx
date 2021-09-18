@@ -1,7 +1,8 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
   Button, CircularProgress } from '@material-ui/core'
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { createStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles } from '@mui/styles';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 import {
