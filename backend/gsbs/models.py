@@ -11,8 +11,7 @@ def upload_avatar_path(instance, filename):
 
 
 def upload_meal_path(instance, filename):
-    ext = filename.split('.')[-1]
-    return '/'.join(['meal', str(instance.meal.id)+str(instance.name)+'.'+str(ext)])
+    return '/'.join(['meal_images', instance.company.name, filename])
 
 
 class UserManager(BaseUserManager):
@@ -79,6 +78,17 @@ class Company(models.Model):
 class Meal(models.Model):
     class Meta:
         db_table = 'meals'
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=['company_id', 'name'],
+                name='meal_name_unique',
+            ),
+        ]
+
+        indexes = [
+            models.Index(fields=['company_id', 'name'])
+        ]
 
     company = models.ForeignKey(
         Company, related_name='companies', on_delete=models.CASCADE)
