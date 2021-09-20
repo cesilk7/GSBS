@@ -1,11 +1,11 @@
 import React from 'react';
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Modal from 'react-modal';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { TextField, Button, CircularProgress } from "@material-ui/core";
+import { TextField, Button, CircularProgress } from '@mui/material/';
 
-import { AUTHENTIC } from "../types";
+import { AUTHENTIC } from '../types';
 import {
   selectOpenSignIn,
   selectOpenSingUp,
@@ -20,22 +20,22 @@ import {
   fetchAsyncLogin,
   fetchAsyncCreateProf,
   fetchAsyncGetMyProf,
-} from "./authSlice";
+} from './authSlice';
 import styles from './Auth.module.css';
 
 const modalStyle = {
   overlay: {
-    backgroundColor: "#777777",
+    backgroundColor: '#777777',
   },
   content: {
-    top: "50%",
-    left: "50%",
+    top: '50%',
+    left: '50%',
 
     width: 350,
     height: 450,
-    padding: "50px",
+    padding: '50px',
 
-    transform: "translate(-50%, -50%)",
+    transform: 'translate(-50%, -50%)',
   }
 }
 

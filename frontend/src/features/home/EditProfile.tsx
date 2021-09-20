@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import Modal from 'react-modal';
-import { Button, TextField, IconButton } from '@material-ui/core';
+import { Button, TextField, IconButton } from '@mui/material/';
 
 import { File } from '../types';
 import {

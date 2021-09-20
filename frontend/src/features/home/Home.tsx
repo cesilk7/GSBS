@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { useTheme, Theme } from '@material-ui/core/styles';
+import { useTheme, Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { Toolbar, Typography, IconButton, Drawer, Divider, List, ListItem,
-  Button, CircularProgress, Badge, Avatar } from '@material-ui/core';
+  ListItemIcon, ListItemText, Button, CircularProgress, Badge, Avatar } from '@mui/material/';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import CreateIcon from '@material-ui/icons/Create';
-import FastFoodIcon from '@material-ui/icons/Fastfood';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import CreateIcon from '@mui/icons-material/Create';
+import FastFoodIcon from '@mui/icons-material/Fastfood';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 import Auth from '../auth/Auth';
 import EditProfile from '../home/EditProfile';
@@ -129,7 +129,7 @@ const Home: React.FC = () => {
   const isLoadingAuth = useAppSelector(selectIsLoadingAuth);
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [openMeal, setOpenMeal] = useState(false);
+  const [activePage, setActivePage] = useState('diary');
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -251,13 +251,53 @@ const Home: React.FC = () => {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem button key={'Diary'}>
-            <ListItemIcon><CreateIcon /></ListItemIcon>
-            <ListItemText primary='Diary' />
+          <ListItem
+            button
+            key={'Diary'}
+            onClick={() => {
+              setActivePage('diary');
+            }}
+          >
+            <ListItemIcon>
+              <CreateIcon className={activePage === 'diary' ? styles.home__active : ''} />
+            </ListItemIcon>
+            <ListItemText primary='Diary' className={activePage === 'diary' ? styles.home__active : ''} />
           </ListItem>
-          <ListItem button key={'Meal'} onClick={() => {setOpenMeal(true)}}>
-            <ListItemIcon><FastFoodIcon /></ListItemIcon>
-            <ListItemText primary='Meal' />
+          <ListItem
+            button
+            key={'Meal'}
+            onClick={() => {
+              setActivePage('meal');
+            }}
+          >
+            <ListItemIcon>
+              <FastFoodIcon className={activePage === 'meal' ? styles.home__active : ''} />
+            </ListItemIcon>
+            <ListItemText primary='Meal' className={activePage === 'meal' ? styles.home__active : ''} />
+          </ListItem>
+          <ListItem
+            button
+            key={'Graph'}
+            onClick={() => {
+              setActivePage('graph');
+            }}
+          >
+            <ListItemIcon>
+              <AutoGraphIcon className={activePage === 'graph' ? styles.home__active : ''} />
+            </ListItemIcon>
+            <ListItemText primary='Graph' className={activePage === 'graph' ? styles.home__active : ''} />
+          </ListItem>
+          <ListItem
+            button
+            key={'Assets'}
+            onClick={() => {
+              setActivePage('assets');
+            }}
+          >
+            <ListItemIcon>
+              <AccountBalanceIcon className={activePage === 'assets' ? styles.home__active : ''} />
+            </ListItemIcon>
+            <ListItemText primary='Assets' className={activePage === 'assets' ? styles.home__active : ''} />
           </ListItem>
         </List>
         <Divider />
@@ -272,7 +312,7 @@ const Home: React.FC = () => {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {openMeal && <MealList />}
+        {activePage === 'meal' && <MealList />}
       </Main>
     </div>
   )

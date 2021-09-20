@@ -7,7 +7,7 @@ import {
   MenuItem,
   Button,
   CircularProgress
-} from '@material-ui/core';
+} from '@mui/material';
 import { Box, Modal, InputAdornment, Switch, FormControlLabel, FormControl, Grid } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';

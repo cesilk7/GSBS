@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { createStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { FaFileUpload, FaFileDownload } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
-import AddIcon from '@material-ui/icons/Add';
-import UpdateIcon from '@material-ui/icons/Update';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { Button, Grid, Tooltip, IconButton, Avatar, Badge } from '@material-ui/core';
+import AddIcon from '@mui/icons-material/Add';
+import UpdateIcon from '@mui/icons-material/Update';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Button, Grid, Tooltip, IconButton } from '@mui/material/';
 import { DataGrid, GridColDef, GridCellEditCommitParams } from '@mui/x-data-grid';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
