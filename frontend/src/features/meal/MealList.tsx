@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { createStyles, Theme } from '@mui/material/styles';
+import React, { useEffect, useCallback } from 'react';
+import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { FaFileUpload, FaFileDownload } from 'react-icons/fa';
 import { FiEdit } from 'react-icons/fi';
 import AddIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Button, Grid, Tooltip, IconButton } from '@mui/material/';
+import { Button, Grid, Tooltip, IconButton } from '@mui/material';
 import { DataGrid, GridColDef, GridCellEditCommitParams } from '@mui/x-data-grid';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 
-import { MEAL, PROPS_MULTIPLE_MEALS } from '../types';
 import {
   selectSelectedRowIds,
   selectMeals,
@@ -22,9 +21,7 @@ import {
   fetchAsyncGetMeals,
   fetchAsyncGetCompanies, setEditedMeal,
 } from './mealSlice';
-import styles from './Meal.module.css';
 import './mealList.css';
-import {fetchAsyncGetMyProf } from '../auth/authSlice';
 import MealDialog from './MealDialog';
 import MealForm from './MealForm';
 

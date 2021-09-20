@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import axios from 'axios';
 
-import {MEAL, MEAL_STATE, PROPS_MEAL, PROPS_MULTIPLE_MEALS, COMPANY } from '../types';
+import { MEAL, MEAL_STATE, PROPS_MEAL, PROPS_MULTIPLE_MEALS, COMPANY } from '../types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
 

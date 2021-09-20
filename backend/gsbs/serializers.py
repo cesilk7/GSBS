@@ -47,8 +47,7 @@ class DiarySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Diary
-        fields = ['id', 'user', 'date', 'wake_up_time', 'bedtime',
-                  'morning_weight',
+        fields = ['id', 'date', 'wake_up_time', 'bedtime', 'morning_weight',
                   'night_weight', 'ate_meal', 'comment']
         extra_kwargs = {'user': {'read_only': True}}
 

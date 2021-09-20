@@ -2,8 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useTheme, Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { Toolbar, Typography, IconButton, Drawer, Divider, List, ListItem,
-  ListItemIcon, ListItemText, Button, CircularProgress, Badge, Avatar } from '@mui/material/';
+import {
+  Avatar,
+  Badge,
+  Button,
+  CircularProgress,
+  Divider,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -19,6 +32,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import Auth from '../auth/Auth';
 import EditProfile from '../home/EditProfile';
 import MealList from '../meal/MealList';
+import DiaryCalendar from '../diary/DiaryCalendar';
 import {
   selectMyProfile,
   selectIsLoadingAuth,
@@ -313,6 +327,7 @@ const Home: React.FC = () => {
       <Main open={open}>
         <DrawerHeader />
         {activePage === 'meal' && <MealList />}
+        {activePage === 'diary' && <DiaryCalendar />}
       </Main>
     </div>
   )

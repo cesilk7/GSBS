@@ -1,14 +1,20 @@
 import React from 'react';
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import {
-  TextField,
-  InputLabel,
-  Select,
-  MenuItem,
+  Box,
   Button,
-  CircularProgress
+  CircularProgress,
+  FormControl,
+  FormControlLabel,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Select,
+  Switch,
+  TextField,
 } from '@mui/material';
-import { Box, Modal, InputAdornment, Switch, FormControlLabel, FormControl, Grid } from '@mui/material';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -26,7 +32,7 @@ import {
   fetchAsyncUpdateMeal,
 } from './mealSlice';
 
-const style = {
+const BoxStyle = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -65,13 +71,12 @@ const MealForm: React.FC = () => {
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
-      <Box sx={style}>
+      <Box sx={BoxStyle}>
         <Formik
           initialErrors={{ name: 'required' }}
           initialValues={editedMeal.id === 0 ? initialState.editedMeal : editedMeal}
           onSubmit={async (values) => {
             await dispatch(fetchCredStart())
-            console.log(values);
             if (editedMeal.id === 0) {
               const result = await dispatch(fetchAsyncCreateMeal(values));
               if (fetchAsyncCreateMeal.fulfilled.match(result)) {
@@ -100,7 +105,7 @@ const MealForm: React.FC = () => {
         >
           {formik => (
             <form onSubmit={formik.handleSubmit}>
-              <h2>{editedMeal.id === 0 ? 'New Meal' : 'Update Meal'}</h2>
+              <h2>{editedMeal.id === 0 ? 'New Meal' : 'Edit Meal'}</h2>
               <br />
               <br />
 
