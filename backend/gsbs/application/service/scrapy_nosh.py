@@ -14,8 +14,7 @@ from django.db.utils import IntegrityError
 from project.settings import MEDIA_ROOT
 from gsbs.models import Meal
 from gsbs.models import Company
-
-URL_NOSH = 'https://nosh.jp/menu'
+from ..consts import URL_NOSH
 
 logger = logging.getLogger(__name__)
 
