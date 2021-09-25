@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render
 from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action
@@ -42,26 +44,25 @@ class MealViewSet(viewsets.ModelViewSet):
     queryset = Meal.objects.order_by('id')
     serializer_class = serializers.MealSerializer
 
-    @action(detail=False, methods=['put'])
-    def multiple_update(self, request):
-        rows = sorted(request.data, key=lambda x: x['id'])
-        ids = [row.get('id') for row in rows]
-        meals = Meal.objects.filter(id__in=ids).order_by('id')
+    def list(self, request, *args, **kwargs):
+        query_type = request.query_params.get('query_type')
+        if query_type == 'options':
+            meals = Meal.select_options()
+            return Response(meals)
+        else:
+            return super().list(self, request, *args, **kwargs)
 
-        update_meals = []
-        for i, meal in enumerate(meals):
-            meal.name = rows[i]['name']
-            meal.price = rows[i]['price']
-            meal.calorie = rows[i]['calorie']
-            meal.protein = rows[i]['protein']
-            meal.sugar = rows[i]['sugar']
-            update_meals.append(meal)
-        Meal.objects.bulk_update(
-            update_meals,
-            fields=['name', 'price', 'calorie', 'protein', 'sugar'])
+    def destroy(self, request, *args, **kwargs):
+        response = {
+            'message': 'DELETE method of single model instance is not allowed'}
+        return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['put'], detail=False)
+    def multiple_update(self, request):
+        ids = Meal.multiple_update(request.data)
         return Response(ids)
 
-    @action(detail=False, methods=['put'])
+    @action(methods=['put'], detail=False)
     def multiple_delete(self, request):
         ids = request.data
         meals = Meal.objects.filter(id__in=ids)
@@ -70,15 +71,36 @@ class MealViewSet(viewsets.ModelViewSet):
             return Response(ids)
         return Response([0])
 
-    def destroy(self, request, *args, **kwargs):
-        response = {
-            'message': 'DELETE method of single model instance is not allowed'}
-        return Response(response, status=status.HTTP_400_BAD_REQUEST)
-
 
 class DiaryViewSet(viewsets.ModelViewSet):
     queryset = Diary.objects.all()
     serializer_class = serializers.DiarySerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        diary = Diary.objects.filter(
+            user=request.user, date=kwargs['pk']).first()
+        if diary:
+            serializer = self.get_serializer(diary)
+            return Response(Diary.change_key_name(serializer.data))
+        return Response(None)
+
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(
+            user=self.request.user,
+            wake_up_time=datetime.strptime(
+                self.request.data['wake_up_time'], '%H:%M'
+            ),
+            bedtime=datetime.strptime(
+                self.request.data['bedtime'], '%H:%M'
+            )
+        )
+
+    def perform_update(self, serializer):
+        serializer.save(
+            wake_up_time=datetime.strptime(
+                self.request.data['wake_up_time'], '%H:%M'
+            ),
+            bedtime=datetime.strptime(
+                self.request.data['bedtime'], '%H:%M'
+            )
+        )

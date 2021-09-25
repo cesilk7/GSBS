@@ -71,7 +71,7 @@ const MealList: React.FC = () => {
       });
       dispatch(setMeals(updateRows));
     },
-    [meals],
+    [meals, dispatch],
   );
 
   useEffect(() => {

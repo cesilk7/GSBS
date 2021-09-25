@@ -135,7 +135,6 @@ export const MealDeleteDialog: React.FC = () => {
                   const updateMeals = meals.filter((m) =>
                     selectedRowIds.includes(m.id)
                   );
-                  console.log(updateMeals);
                   const result = await dispatch(fetchAsyncUpdateMeals(updateMeals));
                   if (fetchAsyncUpdateMeals.fulfilled.match(result)) {
                     await dispatch(fetchAsyncGetMeals());

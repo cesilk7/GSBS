@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.db.models import F
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 import uuid
 
 from django.conf import settings
@@ -109,6 +112,31 @@ class Meal(models.Model):
     def __str__(self):
         return self.company.name + ' ' + self.name
 
+    @classmethod
+    def select_options(cls):
+        return cls.objects \
+            .annotate(value=F('id'), label=F('name')) \
+            .values('value', 'label')
+
+    @classmethod
+    def multiple_update(cls, data):
+        rows = sorted(data, key=lambda x: x['id'])
+        ids = [row.get('id') for row in rows]
+        meals = cls.objects.filter(id__in=ids).order_by('id')
+
+        update_meals = []
+        for i, meal in enumerate(meals):
+            meal.name = rows[i]['name']
+            meal.price = rows[i]['price']
+            meal.calorie = rows[i]['calorie']
+            meal.protein = rows[i]['protein']
+            meal.sugar = rows[i]['sugar']
+            update_meals.append(meal)
+        cls.objects.bulk_update(
+            update_meals,
+            fields=['name', 'price', 'calorie', 'protein', 'sugar'])
+        return ids
+
 
 class Diary(models.Model):
     class Meta:
@@ -120,8 +148,10 @@ class Diary(models.Model):
             )
         ]
 
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='owner',
+        on_delete=models.CASCADE
+    )
     date = models.DateField(null=False, blank=False)
     wake_up_time = models.TimeField(blank=True, null=True)
     bedtime = models.TimeField(blank=True, null=True)
@@ -138,3 +168,9 @@ class Diary(models.Model):
 
     def __str__(self):
         return self.user.email + ' : ' + self.date.strftime('%Y-%m-%d')
+
+    @classmethod
+    def change_key_name(cls, diary):
+        diary['ate_meal'] = Meal.select_options().filter(
+            id__in=diary['ate_meal'])
+        return diary

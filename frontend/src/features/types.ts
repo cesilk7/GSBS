@@ -2,7 +2,7 @@ export interface File extends Blob {
   readonly lastModified: number;
   readonly name: string;
 }
-/* authSlice.tsx */
+/* authSlice.ts */
 export interface JWT {
   refresh: string;
   access: string;
@@ -37,7 +37,7 @@ export interface AUTH_STATE {
   isLoadingAuth: boolean;
   myProfile: MY_PROFILE;
 }
-/* mealSlice.tsx */
+/* mealSlice.ts */
 export interface MEAL {
   id: number;
   company: number;
@@ -90,4 +90,26 @@ export interface MEAL_STATE {
   meals: MEAL[];
   editedMeal: PROPS_MEAL;
   companies: COMPANY[];
+}
+/* diarySlice.ts */
+export interface DIARY {
+  id: number;
+  date: string;
+  wake_up_time: string;
+  bedtime: string;
+  morning_weight: number;
+  night_weight: number;
+  ate_meal: number[];
+  comment: string;
+}
+export interface OPTION_MEAL {
+  value: number;
+  label: string;
+}
+export interface DIARY_STATE {
+  openDiaryForm: boolean;
+  isLoadingDiary: boolean;
+  diaries: DIARY[];
+  editedDiary: DIARY;
+  optionMeals: OPTION_MEAL[];
 }

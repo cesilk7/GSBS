@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from .models import Profile, Company, Meal, Diary
@@ -15,8 +17,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    created_on = serializers.DateTimeField(format='%Y-%m-%d %H:%M',
-                                           read_only=True)
+    created_on = serializers.DateTimeField(
+        format='%Y-%m-%d %H:%M', read_only=True)
 
     class Meta:
         model = Profile
@@ -36,20 +38,31 @@ class MealSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meal
-        fields = ['id', 'company', 'company_name', 'name', 'price', 'calorie',
-                  'protein', 'carbohydrate', 'sugar', 'lipid', 'dietary_fiber',
-                  'salt', 'is_bad', 'url', 'img']
+        fields = [
+            'id', 'company', 'company_name', 'name', 'price', 'calorie',
+            'protein', 'carbohydrate', 'sugar', 'lipid', 'dietary_fiber',
+            'salt', 'is_bad', 'url', 'img'
+        ]
 
 
 class DiarySerializer(serializers.ModelSerializer):
-    wake_up_time = ('', serializers.TimeField(format='%H:%M'))
-    bedtime = ('', serializers.TimeField(format='%H:%M'))
+    wake_up_time = serializers.SerializerMethodField()
+    bedtime = serializers.SerializerMethodField()
 
     class Meta:
         model = Diary
-        fields = ['id', 'date', 'wake_up_time', 'bedtime', 'morning_weight',
-                  'night_weight', 'ate_meal', 'comment']
-        extra_kwargs = {'user': {'read_only': True}}
+        fields = [
+            'id', 'date', 'wake_up_time', 'bedtime', 'morning_weight',
+            'night_weight', 'ate_meal', 'comment'
+        ]
+        # depth = 1
 
-    def create(self, validated_data):
-        pass
+    def get_wake_up_time(self, instance):
+        return datetime(
+            1970, 1, 1, instance.wake_up_time.hour, instance.wake_up_time.minute
+        )
+
+    def get_bedtime(self, instance):
+        return datetime(
+            1970, 1, 1, instance.bedtime.hour, instance.bedtime.minute
+        )
