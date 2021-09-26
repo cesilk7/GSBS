@@ -77,8 +77,6 @@ const DiaryForm: React.FC = () => {
           await dispatch(resetOpenDiaryForm());
         }
       }}
-      aria-labelledby='modal-modal-title'
-      aria-describedby='modal-modal-description'
     >
       <Box sx={BoxStyle}>
         <Formik
@@ -118,7 +116,7 @@ const DiaryForm: React.FC = () => {
         >
           {formik => (
             <form onSubmit={formik.handleSubmit}>
-              <h2>{canCreateDiary(editedDiary) ? 'New diary' : 'Update diary'}</h2>
+              <h2>{canCreateDiary(editedDiary) ? 'New Diary' : 'Edit Diary'}</h2>
               <br />
 
               <Grid container spacing={3}>

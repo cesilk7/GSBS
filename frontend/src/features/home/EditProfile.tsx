@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import Modal from 'react-modal';
-import { Button, TextField, IconButton } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Modal,
+  TextField
+} from '@mui/material';
 
 import { File } from '../types';
 import {
@@ -16,17 +21,18 @@ import {
 import styles from './Home.module.css';
 import { MdAddAPhoto } from "react-icons/all";
 
-const customStyles = {
-  content: {
-    top: '55%',
-    left: '50%',
-
-    width: 280,
-    height: 220,
-    padding: '50px',
-
-    transform: 'translate(-50%, -50%)',
-  },
+const BoxStyle = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 280,
+  height: 220,
+  bgcolor: 'background.paper',
+  border: '1px solid #e0e0e0',
+  borderRadius: 1,
+  boxShadow: 24,
+  p: 4,
 };
 
 const EditProfile: React.FC = () => {
@@ -51,14 +57,13 @@ const EditProfile: React.FC = () => {
   };
 
   return (
-    <>
-      <Modal
-        isOpen={openProfile}
-        onRequestClose={async () => {
-          await dispatch(resetOpenProfile());
-        }}
-        style={customStyles}
-      >
+    <Modal
+      open={openProfile}
+      onClose={async () => {
+        await dispatch(resetOpenProfile());
+      }}
+    >
+      <Box sx={BoxStyle}>
         <form className={styles.home__profile}>
           <h1 className={styles.home__title}>life management</h1>
           <br />
@@ -89,8 +94,8 @@ const EditProfile: React.FC = () => {
             Update
           </Button>
         </form>
-      </Modal>
-    </>
+      </Box>
+    </Modal>
   )
 };
 
