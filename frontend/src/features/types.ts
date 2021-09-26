@@ -85,11 +85,13 @@ export interface MEAL_STATE {
   openDeleteDialog: boolean;
   openUpdateDialog: boolean;
   openMealForm: boolean;
+  openCompanyForm: boolean;
   isLoadingMeal: boolean;
   selectedRowIds: number[];
   meals: MEAL[];
   editedMeal: PROPS_MEAL;
   companies: COMPANY[];
+  editedCompany: COMPANY;
 }
 /* diarySlice.ts */
 export interface DIARY {

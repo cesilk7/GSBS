@@ -94,10 +94,43 @@ export const fetchAsyncGetCompanies = createAsyncThunk(
   }
 );
 
+export const fetchAsyncCreateCompany = createAsyncThunk(
+  'company/createCompany',
+  async (company: COMPANY) => {
+    const res = await axios.post<COMPANY>(`${apiUrl}api/company/`,
+      company,
+      {
+        headers: {
+          'ConTent-Type': 'application/json',
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+export const fetchAsyncUpdateCompany = createAsyncThunk(
+  'company/updateCompany',
+  async (company: COMPANY) => {
+    const res = await axios.put<COMPANY>(`${apiUrl}api/company/${company.id}/`,
+      company,
+      {
+        headers: {
+          'ConTent-Type': 'application/json',
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const initialState: MEAL_STATE = {
   openDeleteDialog: false,
   openUpdateDialog: false,
   openMealForm: false,
+  openCompanyForm: false,
   isLoadingMeal: false,
   selectedRowIds: [],
   meals: [
@@ -134,6 +167,10 @@ export const initialState: MEAL_STATE = {
     is_bad: false,
   },
   companies: [],
+  editedCompany: {
+    id: 0,
+    name: '',
+  },
 };
 
 export const mealSlice = createSlice({
@@ -164,6 +201,12 @@ export const mealSlice = createSlice({
     resetOpenMealForm(state) {
       state.openMealForm = false;
     },
+    setOpenCompanyForm(state) {
+      state.openCompanyForm = true;
+    },
+    resetOpenCompanyForm(state) {
+      state.openCompanyForm = false;
+    },
     setSelectedRowIds(state, action) {
       state.selectedRowIds = action.payload;
     },
@@ -175,6 +218,9 @@ export const mealSlice = createSlice({
     },
     setEditedMeal(state, action) {
       state.editedMeal = action.payload;
+    },
+    setEditedCompany(state, action) {
+      state.editedCompany = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -201,8 +247,22 @@ export const mealSlice = createSlice({
     );
     builder.addCase(fetchAsyncUpdateMeal.fulfilled,
       (state, action: PayloadAction<MEAL>) => {
-        state.meals = state.meals.map((m) => m.id === action.payload.id ? action.payload : m)
+        state.meals = state.meals.map((m) =>
+          m.id === action.payload.id ? action.payload : m
+        )
         state.editedMeal = initialState.editedMeal;
+      }
+    );
+    builder.addCase(fetchAsyncCreateCompany.fulfilled,
+      (state, action: PayloadAction<COMPANY>) => {
+        state.companies = [...state.companies, action.payload]
+      }
+    );
+    builder.addCase(fetchAsyncUpdateCompany.fulfilled,
+      (state, action: PayloadAction<COMPANY>) => {
+        state.companies = state.companies.map((c) =>
+          c.id === action.payload.id ? action.payload : c
+        )
       }
     );
   }
@@ -217,19 +277,24 @@ export const {
   resetOpenUpdateDialog,
   setOpenMealForm,
   resetOpenMealForm,
+  setOpenCompanyForm,
+  resetOpenCompanyForm,
   setSelectedRowIds,
   resetSelectedRowIds,
   setMeals,
   setEditedMeal,
+  setEditedCompany,
 } = mealSlice.actions;
 
 export const selectIsLoadingMeal = (state: RootState) => state.meal.isLoadingMeal;
 export const selectOpenDeleteDialog = (state: RootState) => state.meal.openDeleteDialog;
 export const selectOpenUpdateDialog = (state: RootState) => state.meal.openUpdateDialog;
 export const selectOpenMealForm = (state: RootState) => state.meal.openMealForm;
+export const selectOpenCompanyForm = (state: RootState) => state.meal.openCompanyForm;
 export const selectSelectedRowIds = (state: RootState) => state.meal.selectedRowIds;
 export const selectMeals = (state: RootState) => state.meal.meals;
 export const selectEditedMeal = (state: RootState) => state.meal.editedMeal;
 export const selectCompanies = (state: RootState) => state.meal.companies;
+export const selectEditedCompany = (state: RootState) => state.meal.editedCompany;
 
 export default mealSlice.reducer;

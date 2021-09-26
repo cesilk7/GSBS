@@ -7,14 +7,17 @@ import {
   FormControl,
   FormControlLabel,
   Grid,
+  IconButton,
   InputAdornment,
   InputLabel,
   MenuItem,
   Modal,
   Select,
   Switch,
+  Tooltip,
   TextField,
 } from '@mui/material';
+import { FaStoreAlt } from 'react-icons/fa'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -27,10 +30,13 @@ import {
   fetchCredStart,
   fetchCredEnd,
   resetOpenMealForm,
+  setOpenCompanyForm,
   setEditedMeal,
+  setEditedCompany,
   fetchAsyncCreateMeal,
   fetchAsyncUpdateMeal,
 } from './mealSlice';
+import { PROPS_MEAL } from "../types";
 
 const BoxStyle = {
   position: 'absolute' as 'absolute',
@@ -44,6 +50,10 @@ const BoxStyle = {
   borderRadius: 1,
   boxShadow: 24,
   p: 4,
+};
+
+const canCreateMeal = (meal: PROPS_MEAL) => {
+  return meal.id === 0;
 };
 
 const MealForm: React.FC = () => {
@@ -68,25 +78,21 @@ const MealForm: React.FC = () => {
           await dispatch(setEditedMeal(initialState.editedMeal));
         }
       }}
-      aria-labelledby='modal-modal-title'
-      aria-describedby='modal-modal-description'
     >
       <Box sx={BoxStyle}>
         <Formik
           initialErrors={{ name: 'required' }}
-          initialValues={editedMeal.id === 0 ? initialState.editedMeal : editedMeal}
+          initialValues={canCreateMeal(editedMeal) ? initialState.editedMeal : editedMeal}
           onSubmit={async (values) => {
             await dispatch(fetchCredStart())
-            if (editedMeal.id === 0) {
-              const result = await dispatch(fetchAsyncCreateMeal(values));
-              if (fetchAsyncCreateMeal.fulfilled.match(result)) {
-                await dispatch(resetOpenMealForm());
-              }
+            let result;
+            if (canCreateMeal(editedMeal)) {
+              result = await dispatch(fetchAsyncCreateMeal(values));
             } else {
-              const result = await dispatch(fetchAsyncUpdateMeal(values));
-              if (fetchAsyncUpdateMeal.fulfilled.match(result)) {
-                await dispatch(resetOpenMealForm());
-              }
+              result = await dispatch(fetchAsyncUpdateMeal(values));
+            }
+            if (fetchAsyncCreateMeal.fulfilled.match(result) || fetchAsyncUpdateMeal.fulfilled.match(result)) {
+              await dispatch(resetOpenMealForm());
             }
             await dispatch(fetchCredEnd());
           }}
@@ -105,7 +111,30 @@ const MealForm: React.FC = () => {
         >
           {formik => (
             <form onSubmit={formik.handleSubmit}>
-              <h2>{editedMeal.id === 0 ? 'New Meal' : 'Edit Meal'}</h2>
+              <Grid container alignItems='center'>
+                <Grid item xs={11}>
+                  <h2>{canCreateMeal(editedMeal) ? 'New Meal' : 'Edit Meal'}</h2>
+                </Grid>
+                <Grid item xs={1}>
+                  <Tooltip title='edit company' aria-label='edit company'>
+                    <IconButton
+                      color='error'
+                      onClick={async () => {
+                        const companyId = (document.getElementsByName('company')[0] as HTMLInputElement)?.value
+                        if (companyId !== '0' && companyId !== '') {
+                          await dispatch(setEditedCompany({
+                            id: (document.getElementsByName('company')[0] as HTMLInputElement)?.value,
+                            name: (document.getElementById('companyName') as HTMLInputElement)?.innerHTML
+                          }));
+                        }
+                        await dispatch(setOpenCompanyForm());
+                      }}
+                    >
+                      <FaStoreAlt style={{ fontSize: 25 }} />
+                    </IconButton>
+                  </Tooltip>
+                </Grid>
+              </Grid>
               <br />
               <br />
 
@@ -115,10 +144,14 @@ const MealForm: React.FC = () => {
                     <InputLabel>company name</InputLabel>
                     <Select
                       variant='standard'
+                      id='companyName'
                       name='company'
                       onChange={formik.handleChange}
                       value={formik.values.company}
                     >
+                      <MenuItem key='0' value='0'>
+                        <em>None</em>
+                      </MenuItem>
                       {companyOptions}
                     </Select>
                   </FormControl>
@@ -282,7 +315,7 @@ const MealForm: React.FC = () => {
                       variant='contained'
                       type='submit'
                     >
-                      {editedMeal.id === 0 ? 'create' : 'update'}
+                      {canCreateMeal(editedMeal) ? 'create' : 'update'}
                     </Button>
                   }
                 </Grid>

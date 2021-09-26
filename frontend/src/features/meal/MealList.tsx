@@ -24,6 +24,7 @@ import {
 import './mealList.css';
 import MealDialog from './MealDialog';
 import MealForm from './MealForm';
+import CompanyForm from './CompanyForm';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonRow: {
@@ -51,7 +52,6 @@ const MealList: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={async () => {
-            console.log(params.row);
             await dispatch(setEditedMeal(params.row));
             await dispatch(setOpenMealForm());
           }}
@@ -86,6 +86,7 @@ const MealList: React.FC = () => {
     <>
       <MealDialog />
       <MealForm />
+      <CompanyForm />
       <br />
       <Grid
         className={classes.buttonRow}
