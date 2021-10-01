@@ -2,7 +2,12 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import axios from 'axios'
 
-import { DIARY_STATE, DIARY, OPTION_MEAL } from '../types';
+import {
+  DIARY_STATE,
+  DIARY,
+  OPTION_MEAL,
+  PERIOD
+} from '../types';
 
 const apiUrl = process.env.REACT_APP_DEV_API_URL;
 
@@ -23,7 +28,7 @@ export const initialState: DIARY_STATE = {
   ],
   editedDiary: {
     id: 0,
-    date: new Date().toString(),
+    date: '',
     wake_up_time: new Date(1970, 1, 1, 6, 0, 0).toString(),
     bedtime: new Date(1970, 1, 1, 23, 0, 0).toString(),
     morning_weight: 60.0,
@@ -97,6 +102,21 @@ export const fetchAsyncUpdateDiary = createAsyncThunk(
   }
 );
 
+export const fetchAsyncGetCalendarEvents = createAsyncThunk(
+  'diary/getCalendarEvents',
+  async (period: PERIOD) => {
+    const res = await axios({
+      method: 'get',
+      url: `${apiUrl}api/diary/calendar_events/`,
+      params: period,
+      headers: {
+        Authorization: `JWT ${localStorage.localJWT}`,
+      },
+    });
+    return res.data;
+  }
+);
+
 export const diarySlice = createSlice({
   name: 'diary',
   initialState,
@@ -115,6 +135,9 @@ export const diarySlice = createSlice({
     },
     setEditedDiary(state, action) {
       state.editedDiary = action.payload;
+    },
+    setEditedDiaryDate(state, action) {
+      state.editedDiary.date = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -153,6 +176,7 @@ export const {
   setOpenDiaryForm,
   resetOpenDiaryForm,
   setEditedDiary,
+  setEditedDiaryDate,
 } = diarySlice.actions;
 
 export const selectIsLoadingDiary = (state: RootState) => state.diary.isLoadingDiary;

@@ -104,3 +104,12 @@ class DiaryViewSet(viewsets.ModelViewSet):
                 self.request.data['bedtime'], '%H:%M'
             )
         )
+
+    @action(methods=['get'], detail=False)
+    def calendar_events(self, request):
+        events = Diary.select_calendar_events(
+            request.user,
+            request.query_params.get('start_date'),
+            request.query_params.get('end_date')
+        )
+        return Response(events)

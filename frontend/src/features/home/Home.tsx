@@ -143,7 +143,7 @@ const Home: React.FC = () => {
   const isLoadingAuth = useAppSelector(selectIsLoadingAuth);
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [activePage, setActivePage] = useState('diary');
+  const [activePage, setActivePage] = useState('');
 
   const handleDrawerOpen = () => {
     setOpen(true);

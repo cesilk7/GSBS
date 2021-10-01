@@ -108,6 +108,14 @@ export interface OPTION_MEAL {
   value: number;
   label: string;
 }
+export interface PERIOD {
+  start_date: string;
+  end_date: string;
+}
+export interface CALENDAR_EVENT {
+  date: string;
+  title: string;
+}
 export interface DIARY_STATE {
   openDiaryForm: boolean;
   isLoadingDiary: boolean;

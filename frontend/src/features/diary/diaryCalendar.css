@@ -1,0 +1,18 @@
+.fc-day-today div.fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+    background-color: #e4e5ff !important;
+}
+div.fc-daygrid-day-events > div:nth-child(1) > a > div > div > div > div.fc-event-title.fc-sticky:after {
+    content: ' kcal';
+}
+div.fc-daygrid-day-events > div:nth-child(1) > a > div {
+    background-color: #3f1fff;
+}
+th.fc-day-sun div a {
+    color: blue;
+}
+th.fc-day-sat div a {
+    color: red;
+}
+table.fc-scrollgrid.fc-scrollgrid-liquid, th, td {
+    border-color: #d8d3ff !important;
+}

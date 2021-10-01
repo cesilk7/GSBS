@@ -23,6 +23,7 @@ import {
   selectOpenDiaryForm,
   selectEditedDiary,
   selectOptionMeals,
+  setEditedDiary,
   fetchCredStart,
   fetchCredEnd,
   resetOpenDiaryForm,
@@ -63,8 +64,6 @@ const DiaryForm: React.FC = () => {
   useEffect(() => {
     const fetchBootLoader = async () => {
       await dispatch(fetchAsyncGetMealOptions());
-      const today = utils.dateFormatChange(new Date().toString());
-      await dispatch(fetchAsyncGetOneDiary(today));
     }
     fetchBootLoader();
   }, [dispatch]);
@@ -75,13 +74,14 @@ const DiaryForm: React.FC = () => {
       onClose={async () => {
         if (!isLoadingDiary) {
           await dispatch(resetOpenDiaryForm());
+          await dispatch(setEditedDiary(initialState.editedDiary));
         }
       }}
     >
       <Box sx={BoxStyle}>
         <Formik
           initialErrors={{ date: 'required' }}
-          initialValues={canCreateDiary(editedDiary) ? initialState.editedDiary : editedDiary}
+          initialValues={editedDiary}
           onSubmit={async (values) => {
             await dispatch(fetchCredStart());
 
@@ -100,7 +100,7 @@ const DiaryForm: React.FC = () => {
             }
             if (fetchAsyncCreateDiary.fulfilled.match(result) || fetchAsyncUpdateDiary.fulfilled.match(result)) {
               await dispatch(resetOpenDiaryForm());
-              await dispatch(fetchAsyncGetOneDiary(today));
+              await dispatch(setEditedDiary(initialState.editedDiary));
             }
             await dispatch(fetchCredEnd());
           }}
@@ -126,7 +126,7 @@ const DiaryForm: React.FC = () => {
                       label='date'
                       inputFormat='yyyy/MM/dd'
                       mask='____/__/__'
-                      disabled={!canCreateDiary(editedDiary)}
+                      disabled={true}
                       value={formik.values.date}
                       onChange={(date) => {
                         formik.setFieldValue('date', date);

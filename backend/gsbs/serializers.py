@@ -55,7 +55,6 @@ class DiarySerializer(serializers.ModelSerializer):
             'id', 'date', 'wake_up_time', 'bedtime', 'morning_weight',
             'night_weight', 'ate_meal', 'comment'
         ]
-        # depth = 1
 
     def get_wake_up_time(self, instance):
         return datetime(
