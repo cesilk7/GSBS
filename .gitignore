@@ -1,8 +1,9 @@
 
 # python
-__init__.py
 media
 static
+backend/project/__init__.py
+backend/gsbs/migrations/__init__.py
 
 # react
 node_modules
