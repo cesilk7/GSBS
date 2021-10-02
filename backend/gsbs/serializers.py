@@ -43,6 +43,7 @@ class MealSerializer(serializers.ModelSerializer):
             'protein', 'carbohydrate', 'sugar', 'lipid', 'dietary_fiber',
             'salt', 'is_bad', 'url', 'img'
         ]
+        extra_kwargs = {'img': {'read_only': True}}
 
 
 class DiarySerializer(serializers.ModelSerializer):
