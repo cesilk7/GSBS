@@ -188,7 +188,8 @@ class Diary(models.Model):
             .select_related() \
             .values('date') \
             .annotate(title=Sum('ate_meal__calorie')) \
-            .filter(user=user, date__gte=start, date__lt=end)
+            .filter(user=user, total_calorie__isnull=True,
+                    date__gte=start, date__lt=end)
         calorie_2 = cls.objects \
             .annotate(title=F('total_calorie')) \
             .values('title', 'date') \
