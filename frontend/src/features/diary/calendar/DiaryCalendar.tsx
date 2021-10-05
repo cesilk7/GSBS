@@ -1,20 +1,20 @@
 import React, { useCallback } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 
-import { DIARY } from "../types";
+import { DIARY } from "../../types";
 import {
   selectEditedDiary,
   setOpenDiaryForm,
   setEditedDiaryDate,
   fetchAsyncGetOneDiary,
   fetchAsyncGetCalendarEvents,
-} from './diarySlice';
-import DiaryForm from './DiaryForm';
+} from '../diarySlice';
+import DiaryForm from '../form/DiaryForm';
 import './diaryCalendar.css';
-import * as utils from '../../utils/common';
+import * as utils from '../../../utils/common';
 
 const canCreateDiary = (diary: DIARY) => {
   return diary.id === 0;
@@ -30,7 +30,7 @@ const DiaryCalendar: React.FC = () => {
       end_date: utils.dateFormatChange(info.endStr)
     }));
     return results.payload;
-  }, []);
+  }, [dispatch]);
 
   const handleDateClick = useCallback(async (arg: DateClickArg) => {
     await dispatch(fetchAsyncGetOneDiary(arg.dateStr));
@@ -38,7 +38,7 @@ const DiaryCalendar: React.FC = () => {
       await dispatch(setEditedDiaryDate(new Date(arg.dateStr).toString()));
     }
     await dispatch(setOpenDiaryForm());
-  }, []);
+  }, [dispatch, editedDiary]);
 
   return (
     <>

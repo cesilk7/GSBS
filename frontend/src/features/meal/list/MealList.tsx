@@ -8,7 +8,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Grid, Tooltip, IconButton } from '@mui/material';
 import { DataGrid, GridColDef, GridCellEditCommitParams } from '@mui/x-data-grid';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 
 import {
   selectSelectedRowIds,
@@ -20,11 +20,11 @@ import {
   setMeals,
   fetchAsyncGetMeals,
   fetchAsyncGetCompanies, setEditedMeal,
-} from './mealSlice';
+} from '../mealSlice';
 import './mealList.css';
-import MealDialog from './MealDialog';
-import MealForm from './MealForm';
-import CompanyForm from './CompanyForm';
+import MealDialog from '../MealDialog';
+import MealForm from '../MealForm';
+import CompanyForm from '../CompanyForm';
 
 const useStyles = makeStyles((theme: Theme) => ({
   buttonRow: {

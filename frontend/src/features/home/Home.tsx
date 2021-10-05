@@ -28,11 +28,12 @@ import CreateIcon from '@mui/icons-material/Create';
 import FastFoodIcon from '@mui/icons-material/Fastfood';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import { Route, BrowserRouter } from 'react-router-dom';
 
 import Auth from '../auth/Auth';
 import EditProfile from '../home/EditProfile';
-import MealList from '../meal/MealList';
-import DiaryCalendar from '../diary/DiaryCalendar';
+import MealList from '../meal/list/MealList';
+import DiaryCalendar from '../diary/calendar/DiaryCalendar';
 import {
   selectMyProfile,
   selectIsLoadingAuth,
@@ -161,6 +162,7 @@ const Home: React.FC = () => {
           dispatch(setOpenSignIn());
           return null;
         }
+
       }
     };
     fetchBootLoader();
@@ -197,6 +199,7 @@ const Home: React.FC = () => {
                     dispatch(resetOpenProfile());
                     handleDrawerClose();
                     dispatch(setOpenSignIn());
+                    window.location.href = '/';
                   }}
                 >
                   Logout
@@ -270,42 +273,46 @@ const Home: React.FC = () => {
             key={'Diary'}
             onClick={() => {
               setActivePage('diary');
+              window.location.href = '/diary';
             }}
           >
             <ListItemIcon>
-              <CreateIcon className={activePage === 'diary' ? styles.home__active : ''} />
+              <CreateIcon className={window.location.pathname === '/diary' ? styles.home__active : ''} />
             </ListItemIcon>
-            <ListItemText primary='Diary' className={activePage === 'diary' ? styles.home__active : ''} />
+            <ListItemText primary='Diary' className={window.location.pathname === '/diary' ? styles.home__active : ''} />
           </ListItem>
           <ListItem
             button
             key={'Meal'}
             onClick={() => {
               setActivePage('meal');
+              window.location.href = '/meal';
             }}
           >
             <ListItemIcon>
-              <FastFoodIcon className={activePage === 'meal' ? styles.home__active : ''} />
+              <FastFoodIcon className={window.location.pathname === '/meal' ? styles.home__active : ''} />
             </ListItemIcon>
-            <ListItemText primary='Meal' className={activePage === 'meal' ? styles.home__active : ''} />
+            <ListItemText primary='Meal' className={window.location.pathname === '/meal' ? styles.home__active : ''} />
           </ListItem>
           <ListItem
             button
-            key={'Graph'}
+            key={'Aggregate'}
             onClick={() => {
-              setActivePage('graph');
+              setActivePage('aggregate');
+              window.location.href = '/aggregate';
             }}
           >
             <ListItemIcon>
-              <AutoGraphIcon className={activePage === 'graph' ? styles.home__active : ''} />
+              <AutoGraphIcon className={window.location.pathname === '/aggregate' ? styles.home__active : ''} />
             </ListItemIcon>
-            <ListItemText primary='Graph' className={activePage === 'graph' ? styles.home__active : ''} />
+            <ListItemText primary='Aggregate' className={window.location.pathname === '/aggregate' ? styles.home__active : ''} />
           </ListItem>
           <ListItem
             button
             key={'Assets'}
             onClick={() => {
               setActivePage('assets');
+              window.location.href = '/assets';
             }}
           >
             <ListItemIcon>
@@ -326,8 +333,14 @@ const Home: React.FC = () => {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        {activePage === 'meal' && <MealList />}
-        {activePage === 'diary' && <DiaryCalendar />}
+          {profile?.username ?
+            <BrowserRouter>
+              <Route exact path='/diary' component={DiaryCalendar} />
+              <Route exact path='/meal' component={MealList} />
+            </BrowserRouter>
+            :
+            null
+          }
       </Main>
     </div>
   )

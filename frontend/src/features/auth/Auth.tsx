@@ -154,6 +154,7 @@ const Auth: React.FC = () => {
               }
               await dispatch(fetchCredEnd());
               await dispatch(resetOpenSignIn());
+              window.location.href = '/diary';
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string().email('email format is wrong')

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import {
   Box,
   Button,
@@ -28,12 +28,11 @@ import {
   fetchCredEnd,
   resetOpenDiaryForm,
   fetchAsyncGetMealOptions,
-  fetchAsyncGetOneDiary,
   fetchAsyncCreateDiary,
   fetchAsyncUpdateDiary,
-} from './diarySlice';
-import { DIARY } from '../types';
-import * as utils from '../../utils/common';
+} from '../diarySlice';
+import { DIARY } from '../../types';
+import * as utils from '../../../utils/common';
 import './diaryForm.css';
 
 const BoxStyle = {
@@ -92,7 +91,6 @@ const DiaryForm: React.FC = () => {
             data.ate_meal = data.ate_meal.map((m: any) => m.value);
 
             let result;
-            let today = utils.dateFormatChange(new Date().toString());
             if (canCreateDiary(editedDiary)) {
               result = await dispatch(fetchAsyncCreateDiary(data));
             } else {
