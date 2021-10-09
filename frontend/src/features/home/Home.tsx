@@ -28,7 +28,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import FastFoodIcon from '@mui/icons-material/Fastfood';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, Link } from 'react-router-dom';
 
 import Auth from '../auth/Auth';
 import EditProfile from '../home/EditProfile';
@@ -47,6 +47,7 @@ import {
   fetchAsyncGetMyProf,
 } from '../auth/authSlice';
 import styles from './Home.module.css';
+import './Home.css';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -170,178 +171,188 @@ const Home: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <Auth />
-      <EditProfile />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
-            disabled={!profile?.username}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 2 }}>
-            life management
-          </Typography>
-          {profile?.username ? (
-            <>
-              <div className={styles.home__logout}>
-                { isLoadingAuth && <CircularProgress /> }
+      <BrowserRouter>
+        <Auth />
+        <EditProfile />
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: 'none' }) }}
+              disabled={!profile?.username}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 2 }}>
+              life management
+            </Typography>
+            {profile?.username ? (
+              <>
+                <div className={styles.home__logout}>
+                  { isLoadingAuth && <CircularProgress /> }
+                  <Button
+                    color='inherit'
+                    onClick={() => {
+                      localStorage.removeItem('localJWT');
+                      dispatch(editUsername(''));
+                      dispatch(resetOpenProfile());
+                      handleDrawerClose();
+                      dispatch(setOpenSignIn());
+                      window.location.href = '/';
+                    }}
+                  >
+                    Logout
+                  </Button>
+                  <button
+                    className={styles.home__btnModal}
+                    onClick={() => {
+                      dispatch(setOpenProfile());
+                    }}
+                  >
+                    <StyledBadge
+                      overlap="circular"
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      variant="dot"
+                    >
+                      <Avatar alt='who?' src={profile.img} />{' '}
+                    </StyledBadge>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div>
                 <Button
                   color='inherit'
                   onClick={() => {
-                    localStorage.removeItem('localJWT');
-                    dispatch(editUsername(''));
-                    dispatch(resetOpenProfile());
-                    handleDrawerClose();
                     dispatch(setOpenSignIn());
-                    window.location.href = '/';
+                    dispatch(resetOpenSignUp());
                   }}
                 >
-                  Logout
+                  LogIn
                 </Button>
-                <button
-                  className={styles.home__btnModal}
+                <Button
+                  color='inherit'
                   onClick={() => {
-                    dispatch(setOpenProfile());
+                    dispatch(setOpenSignUp());
+                    dispatch(resetOpenSignIn());
                   }}
                 >
-                  <StyledBadge
-                    overlap="circular"
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    variant="dot"
-                  >
-                    <Avatar alt='who?' src={profile.img} />{' '}
-                  </StyledBadge>
-                </button>
+                 SignUp
+                </Button>
               </div>
-            </>
-          ) : (
-            <div>
-              <Button
-                color='inherit'
-                onClick={() => {
-                  dispatch(setOpenSignIn());
-                  dispatch(resetOpenSignUp());
-                }}
-              >
-                LogIn
-              </Button>
-              <Button
-                color='inherit'
-                onClick={() => {
-                  dispatch(setOpenSignUp());
-                  dispatch(resetOpenSignIn());
-                }}
-              >
-               SignUp
-              </Button>
-            </div>
-          )}
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
+            )}
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          sx={{
             width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        classes={{ paper: classes.paper }}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          <ListItem
-            button
-            key={'Diary'}
-            onClick={() => {
-              setActivePage('diary');
-              window.location.href = '/diary';
-            }}
-          >
-            <ListItemIcon>
-              <CreateIcon className={window.location.pathname === '/diary' ? styles.home__active : ''} />
-            </ListItemIcon>
-            <ListItemText primary='Diary' className={window.location.pathname === '/diary' ? styles.home__active : ''} />
-          </ListItem>
-          <ListItem
-            button
-            key={'Meal'}
-            onClick={() => {
-              setActivePage('meal');
-              window.location.href = '/meal';
-            }}
-          >
-            <ListItemIcon>
-              <FastFoodIcon className={window.location.pathname === '/meal' ? styles.home__active : ''} />
-            </ListItemIcon>
-            <ListItemText primary='Meal' className={window.location.pathname === '/meal' ? styles.home__active : ''} />
-          </ListItem>
-          <ListItem
-            button
-            key={'Aggregate'}
-            onClick={() => {
-              setActivePage('aggregate');
-              window.location.href = '/aggregate';
-            }}
-          >
-            <ListItemIcon>
-              <AutoGraphIcon className={window.location.pathname === '/aggregate' ? styles.home__active : ''} />
-            </ListItemIcon>
-            <ListItemText primary='Aggregate' className={window.location.pathname === '/aggregate' ? styles.home__active : ''} />
-          </ListItem>
-          <ListItem
-            button
-            key={'Assets'}
-            onClick={() => {
-              setActivePage('assets');
-              window.location.href = '/assets';
-            }}
-          >
-            <ListItemIcon>
-              <AccountBalanceIcon className={activePage === 'assets' ? styles.home__active : ''} />
-            </ListItemIcon>
-            <ListItemText primary='Assets' className={activePage === 'assets' ? styles.home__active : ''} />
-          </ListItem>
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-          {profile?.username ?
-            <BrowserRouter>
-              <Route exact path='/diary' component={DiaryCalendar} />
-              <Route exact path='/meal' component={MealList} />
-            </BrowserRouter>
-            :
-            null
-          }
-      </Main>
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+          classes={{ paper: classes.paper }}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <List>
+            <Link to='/diary'>
+              <ListItem
+                button
+                key={'Diary'}
+                onClick={() => {
+                  setActivePage('diary');
+                }}
+              >
+                <ListItemIcon>
+                  <CreateIcon className={window.location.pathname === '/diary' ? styles.home__active : ''} />
+                </ListItemIcon>
+                <ListItemText primary='Diary' className={window.location.pathname === '/diary' ? styles.home__active : ''} />
+              </ListItem>
+            </Link>
+            <Link to='/meal'>
+              <ListItem
+                button
+                key={'Meal'}
+                onClick={() => {
+                  setActivePage('meal');
+                }}
+              >
+                <ListItemIcon>
+                  <FastFoodIcon className={window.location.pathname === '/meal' ? styles.home__active : ''} />
+                </ListItemIcon>
+                <ListItemText primary='Meal' className={window.location.pathname === '/meal' ? styles.home__active : ''} />
+              </ListItem>
+            </Link>
+            <Link to='/aggregate'>
+              <ListItem
+                button
+                key={'Aggregate'}
+                onClick={() => {
+                  setActivePage('aggregate');
+                }}
+              >
+                <ListItemIcon>
+                  <AutoGraphIcon className={window.location.pathname === '/aggregate' ? styles.home__active : ''} />
+                </ListItemIcon>
+                <ListItemText primary='Aggregate' className={window.location.pathname === '/aggregate' ? styles.home__active : ''} />
+              </ListItem>
+            </Link>
+            <Link to='assets'>
+              <ListItem
+                button
+                key={'Assets'}
+                onClick={() => {
+                  setActivePage('assets');
+                }}
+              >
+                <ListItemIcon>
+                  <AccountBalanceIcon className={activePage === 'assets' ? styles.home__active : ''} />
+                </ListItemIcon>
+                <ListItemText primary='Assets' className={activePage === 'assets' ? styles.home__active : ''} />
+              </ListItem>
+            </Link>
+          </List>
+          <Divider />
+          <List>
+            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+              <ListItem button key={text}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+        <Main open={open}>
+          <DrawerHeader />
+            {profile?.username ?
+              <Switch>
+                <Route path='/diary'>
+                  <DiaryCalendar />
+                </Route>
+                <Route path='/meal'>
+                  <MealList />
+                </Route>
+              </Switch>
+              :
+              null
+            }
+        </Main>
+      </BrowserRouter>
     </div>
   )
 }
