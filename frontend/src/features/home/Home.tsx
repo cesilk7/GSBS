@@ -34,6 +34,7 @@ import Auth from '../auth/Auth';
 import EditProfile from '../home/EditProfile';
 import MealList from '../meal/list/MealList';
 import DiaryCalendar from '../diary/calendar/DiaryCalendar';
+import Aggregate from '../aggregate/Aggregate';
 import {
   selectMyProfile,
   selectIsLoadingAuth,
@@ -346,6 +347,9 @@ const Home: React.FC = () => {
                 </Route>
                 <Route path='/meal'>
                   <MealList />
+                </Route>
+                <Route path='/aggregate'>
+                  <Aggregate />
                 </Route>
               </Switch>
               :
