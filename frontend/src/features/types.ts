@@ -123,3 +123,14 @@ export interface DIARY_STATE {
   editedDiary: DIARY;
   optionMeals: OPTION_MEAL[];
 }
+/* aggregateSlice.ts */
+export interface AGGREGATE_DATA {
+  date: string[];
+  morning_weight: number[];
+  night_weight: number[];
+  sum_calorie: number[];
+  sum_dietary_fiber: number[];
+}
+export interface AGGREGATE_STATE {
+  aggregate_data: AGGREGATE_DATA;
+}

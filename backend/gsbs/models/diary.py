@@ -1,9 +1,11 @@
+import datetime
 from itertools import chain
 
 from django.db import models
 from django.db.models import F
 from django.db.models import Sum
 from django.conf import settings
+from django_pandas.io import read_frame
 
 from .meal import Meal
 
@@ -54,6 +56,7 @@ class Diary(models.Model):
             .annotate(title=Sum('ate_meal__calorie')) \
             .filter(user=user, total_calorie__isnull=True,
                     date__gte=start, date__lt=end)
+        # not meal data
         calorie_2 = cls.objects \
             .annotate(title=F('total_calorie')) \
             .values('title', 'date') \
@@ -72,3 +75,13 @@ class Diary(models.Model):
             })
 
         return list(chain(calorie_1, calorie_2, weight_list))
+
+    @classmethod
+    def compute_nutrition_per_day(cls, user):
+        # The day this service started to be used
+        start = '2021-10-3'
+        data = cls.objects.values('date', 'morning_weight', 'night_weight') \
+            .annotate(sum_calorie=Sum('ate_meal__calorie'), sum_dietary_fiber=Sum('ate_meal__dietary_fiber')) \
+            .filter(user=user, date__gte=start).order_by('date')
+        df = read_frame(data, fieldnames=['date', 'morning_weight', 'night_weight', 'sum_calorie', 'sum_dietary_fiber'])
+        return df

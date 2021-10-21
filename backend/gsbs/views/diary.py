@@ -49,3 +49,8 @@ class DiaryViewSet(viewsets.ModelViewSet):
             request.query_params.get('end_date')
         )
         return Response(events)
+
+    @action(methods=['get'], detail=False)
+    def nutrition_per_day(self, request):
+        data = Diary.compute_nutrition_per_day(request.user)
+        return Response(data)

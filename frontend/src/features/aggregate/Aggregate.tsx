@@ -1,26 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import Chart from 'react-apexcharts';
 
+import {
+  selectAggregateData,
+  fetchAsyncGetAggregateData
+} from './aggregateSlice';
+import {fetchAsyncGetMealOptions} from "../diary/diarySlice";
+
 const Aggregate: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const aggregate_data = useAppSelector(selectAggregateData);
+
+  useEffect(() => {
+    const fetchBootLoader = async () => {
+      await dispatch(fetchAsyncGetAggregateData());
+    }
+    fetchBootLoader();
+    console.log(aggregate_data.date);
+    console.log(typeof(aggregate_data));
+  }, [dispatch]);
 
   const state = {
     series: [{
       name: 'Calorie',
       type: 'column',
-      data: [1400, 2000, 2500, 1500, 2400, 2800, 3100, 1900]
+      data: aggregate_data.sum_calorie
     }, {
       name: 'Dietary fiber',
       type: 'column',
-      data: [31.1, 29.3, 34, 40, 38.2, 24.9, 36.5, 28.5]
+      data: aggregate_data.sum_dietary_fiber
     }, {
       name: 'Morning weight',
       type: 'line',
-      data: [60, 62, 61.5, 63.1, 62.2, 61.1, 62.3, 64]
+      data: aggregate_data.morning_weight
     }, {
       name: 'Night weight',
       type: 'line',
-      data: [60.4, 62.8, 61.0, 62.1, 61.3, 60.7, 61.3, 62]
+      data: aggregate_data.night_weight
     }],
     options: {
       chart: {
@@ -40,7 +57,7 @@ const Aggregate: React.FC = () => {
         offsetX: 110
       },
       xaxis: {
-        categories: ['2020/10/01', 2010, 2011, 2012, 2013, 2014, 2015, 2016],
+        categories: aggregate_data.date,
       },
       yaxis: [
         {
@@ -54,6 +71,9 @@ const Aggregate: React.FC = () => {
             color: 'rgb(0, 143, 251)',
           },
           labels: {
+            "formatter": function (val: number) {
+                return val.toFixed(0)
+            },
             style: {
               colors: 'rgb(0, 143, 251)',
             },
@@ -78,6 +98,9 @@ const Aggregate: React.FC = () => {
             color: 'rgb(0, 227, 150)'
           },
           labels: {
+            "formatter": function (val: number) {
+                return val.toFixed(1)
+            },
             style: {
               colors: 'rgb(0, 227, 150)',
             },
@@ -101,6 +124,9 @@ const Aggregate: React.FC = () => {
             color: '#FEB019',
           },
           labels: {
+            "formatter": function (val: number) {
+                return val.toFixed(1)
+            },
             style: {
               colors: '#FEB019',
             }
@@ -117,6 +143,11 @@ const Aggregate: React.FC = () => {
           seriesName: 'Night weight',
           min: 55,
           max: 65,
+          labels: {
+            "formatter": function (val: number) {
+                return val.toFixed(1)
+            },
+          }
         },
       ],
       tooltip: {
