@@ -6,7 +6,6 @@ import {
   selectAggregateData,
   fetchAsyncGetAggregateData
 } from './aggregateSlice';
-import {fetchAsyncGetMealOptions} from "../diary/diarySlice";
 
 const Aggregate: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -17,8 +16,6 @@ const Aggregate: React.FC = () => {
       await dispatch(fetchAsyncGetAggregateData());
     }
     fetchBootLoader();
-    console.log(aggregate_data.date);
-    console.log(typeof(aggregate_data));
   }, [dispatch]);
 
   const state = {
@@ -52,7 +49,7 @@ const Aggregate: React.FC = () => {
         width: [2, 2, 3, 3]
       },
       title: {
-        text: 'XYZ - Stock Analysis (2009 - 2016)',
+        text: 'My health data（2021-10-03～）',
         // align: 'left',
         offsetX: 110
       },

@@ -6,7 +6,7 @@ services:
     environment:
       - USE_PTVSD
     volumes:
-      - ./backend:/code/
+      - ./backend:/code
     tty: true
     ports:
       - '8000:8000'

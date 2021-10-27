@@ -44,9 +44,12 @@ class Meal(models.Model):
 
     @classmethod
     def select_options(cls):
-        return cls.objects \
+        data = cls.objects \
             .annotate(value=F('id'), label=F('name')) \
-            .values('value', 'label')
+            .values('value', 'label', 'company__name')
+        for i in range(len(data)):
+            data[i]['label'] = data[i]['company__name'] + ':' + data[i]['label']
+        return data
 
     @classmethod
     def multiple_update(cls, data):

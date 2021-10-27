@@ -149,8 +149,8 @@ const MealList: React.FC = () => {
           autoHeight
           rows={meals}
           columns={columns}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
+          pageSize={100}
+          rowsPerPageOptions={[100]}
           checkboxSelection
           disableSelectionOnClick
           onSelectionModelChange={(newSelectionModel) => {
