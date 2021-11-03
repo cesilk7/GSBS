@@ -3,8 +3,8 @@ import logging
 from django.core.management.base import BaseCommand
 from django.db import ProgrammingError
 
-from gsbs.application.service.scrapy_nosh import ScrapyNoshService
-from gsbs.application.service.scrapy_lawson import ScrapyLawsonService
+from gsbs.application.service.scraping.nosh import ScrapyNoshService
+from gsbs.application.service.scraping.lawson import ScrapyLawsonService
 
 log_format = '【%(asctime)s %(name)s %(levelname)s】%(message)s'
 logging.basicConfig(level=logging.INFO, format=log_format)
@@ -26,8 +26,10 @@ class Command(BaseCommand):
 
         try:
             # python manage.py main_batch create_nosh_data
-            if execute_batch == 'create_nosh_data':
+            if execute_batch == 'nosh':
                 ScrapyNoshService.create_nosh_data()
+            elif execute_batch == 'amazon':
+                pass
         except ProgrammingError as e:
             logging.exception(e)
         except Exception as e:
