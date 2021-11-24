@@ -127,7 +127,7 @@ class ScrapyAmazonService(object):
 
                 history = AmazonPurchaseHistory.objects.create(
                     order_number=order_number,
-                    order_column_no=j+1,
+                    order_row=j+1,
                     order_date=date,
                     item_name=item_name,
                     store_name=store_name,
@@ -158,7 +158,7 @@ class ScrapyAmazonService(object):
             for j in range(len(item_names)):
                 history = AmazonPurchaseHistory.objects.create(
                     order_number=order_number,
-                    order_column_no=j + 1,
+                    order_row=j + 1,
                     order_date=date,
                     item_name=item_names[j].text,
                     store_name=re.sub(r'.*\n', '', store_names[j].text.replace('販売: ', '')),
