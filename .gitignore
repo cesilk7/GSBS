@@ -4,6 +4,7 @@ media
 static
 backend/project/__init__.py
 backend/gsbs/migrations/__init__.py
+backend/log/*.log
 
 # react
 node_modules

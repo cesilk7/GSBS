@@ -5,9 +5,11 @@ from django.db import ProgrammingError
 
 from gsbs.application.service.scraping.nosh import ScrapyNoshService
 from gsbs.application.service.scraping.lawson import ScrapyLawsonService
+from gsbs.application.service.scraping.amazon import ScrapyAmazonService
+
 
 log_format = '【%(asctime)s %(name)s %(levelname)s】%(message)s'
-logging.basicConfig(level=logging.INFO, format=log_format)
+# logging.basicConfig(level=logging.INFO, format=log_format)
 
 
 class Command(BaseCommand):
@@ -22,6 +24,7 @@ class Command(BaseCommand):
             if index == 0:
                 execute_batch = parameter
 
+        logging.basicConfig(level=logging.INFO, format=log_format, filename=f'/code/log/{execute_batch}.log')
         logging.info(f'Start processing: {execute_batch}')
 
         try:
@@ -29,7 +32,7 @@ class Command(BaseCommand):
             if execute_batch == 'nosh':
                 ScrapyNoshService.create_nosh_data()
             elif execute_batch == 'amazon':
-                pass
+                ScrapyAmazonService.create_purchasing_data()
         except ProgrammingError as e:
             logging.exception(e)
         except Exception as e:

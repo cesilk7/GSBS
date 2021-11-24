@@ -5,6 +5,7 @@ services:
     build: ./backend
     environment:
       - USE_PTVSD
+      - HUB_HOST=selenium-hub
     volumes:
       - ./backend:/code
     tty: true
@@ -39,3 +40,31 @@ services:
     command: ['npm', 'start']
     depends_on:
       - backend
+  selenium-hub:
+    image: selenium/hub:4.0.0
+    # VNC接続用
+    # image: selenium/hub:3.141
+    ports:
+      - '4444:4444'
+      - '4442:4442'
+      - '4443:4443'
+  node-firefox:
+    image: selenium/node-firefox:4.0.0
+    # VNC接続用
+    # image: selenium/node-firefox-debug:3.141
+    # ports:
+    #   - 5901:5900
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - TZ=Asia/Tokyo
+      - HUB_HOST=selenium-hub
+      # hubとの接続で必要
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      # 同時実行数を増やす場合に設定を行う
+      # - SE_NODE_MAX_SESSIONS=2
+      # - SE_NODE_OVERRIDE_MAX_SESSIONS=true
