@@ -6,6 +6,7 @@ from django.db import ProgrammingError
 from gsbs.application.service.scraping.nosh import ScrapyNoshService
 from gsbs.application.service.scraping.lawson import ScrapyLawsonService
 from gsbs.application.service.scraping.amazon import ScrapyAmazonService
+from gsbs.application.service.scraping.rakuten_card import ScrapyRakutenCardService
 
 
 log_format = '【%(asctime)s %(name)s %(levelname)s】%(message)s'
@@ -33,6 +34,9 @@ class Command(BaseCommand):
                 ScrapyNoshService.create_nosh_data()
             elif execute_batch == 'amazon':
                 ScrapyAmazonService.create_purchasing_data()
+            elif execute_batch == 'rakuten_card':
+                ScrapyRakutenCardService.create_payment_date()
+
         except ProgrammingError as e:
             logging.exception(e)
         except Exception as e:
