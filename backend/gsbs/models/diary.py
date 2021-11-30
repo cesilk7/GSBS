@@ -2,8 +2,7 @@ import datetime
 from itertools import chain
 
 from django.db import models
-from django.db.models import F
-from django.db.models import Sum
+from django.db.models import F, Sum, Value
 from django.conf import settings
 from django_pandas.io import read_frame
 
@@ -74,7 +73,12 @@ class Diary(models.Model):
                 'title': 'M: ' + str(data['title']) + ' kg'
             })
 
-        return list(chain(calorie_1, calorie_2, weight_list))
+        red_text = cls.objects \
+            .annotate(title=Value('MISSION OUT', output_field=models.CharField())) \
+            .values('title', 'date') \
+            .filter(comment__icontains='MISSION OUT')
+
+        return list(chain(calorie_1, calorie_2, weight_list, red_text))
 
     @classmethod
     def compute_nutrition_per_day(cls, user):

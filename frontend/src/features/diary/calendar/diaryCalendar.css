@@ -7,6 +7,12 @@ div.fc-daygrid-day-events > div:nth-child(1) > a > div > div > div > div.fc-even
 div.fc-daygrid-day-events > div:nth-child(1) > a > div {
     background-color: #3f1fff;
 }
+div.fc-daygrid-day-events > div:nth-child(3) > a > div {
+    background-color: darkred;
+}
+div.fc-daygrid-day-events > div:nth-child(3) > a {
+    border-color: red;
+}
 th.fc-day-sun div a {
     color: blue;
 }

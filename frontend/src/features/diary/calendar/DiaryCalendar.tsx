@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -39,6 +39,11 @@ const DiaryCalendar: React.FC = () => {
     }
     await dispatch(setOpenDiaryForm());
   }, [dispatch, editedDiary]);
+
+  // useEffect(() => {
+  //   const elements = Array.from(document.getElementsByClassName('fc-daygrid-day-frame') as HTMLCollectionOf<HTMLElement>);
+  //   elements[0].style.backgroundColor = 'red';
+  // }, []);
 
   return (
     <>
