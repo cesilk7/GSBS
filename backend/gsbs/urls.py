@@ -8,6 +8,7 @@ router.register('profile', views.ProfileViewSet)
 router.register('company', views.CompanyViewSet)
 router.register('meal', views.MealViewSet)
 router.register('diary', views.DiaryViewSet)
+router.register('rakuten', views.RakutenViewSet)
 
 urlpatterns = [
     path('index/', views.index),

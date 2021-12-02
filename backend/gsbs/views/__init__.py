@@ -4,3 +4,4 @@ from .profile import ProfileViewSet, MyProfileListView
 from .company import CompanyViewSet
 from .meal import MealViewSet
 from .diary import DiaryViewSet
+from .rakuten import RakutenViewSet
