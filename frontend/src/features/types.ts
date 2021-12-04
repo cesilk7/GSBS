@@ -134,3 +134,17 @@ export interface AGGREGATE_DATA {
 export interface AGGREGATE_STATE {
   aggregate_data: AGGREGATE_DATA;
 }
+/* assetsSlice.ts */
+export interface ASSETS_STATE {
+  openRakutenTable: boolean;
+  rakuten_histories: RAKUTEN_CARD_PAYMENT_HISTORY[];
+}
+export interface RAKUTEN_CARD_PAYMENT_HISTORY {
+  id: number;
+  payment_date: string;
+  payment_row: number;
+  store_name: string;
+  user: string;
+  payment_method: string;
+  payment: number;
+}

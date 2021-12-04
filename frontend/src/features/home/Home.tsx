@@ -35,6 +35,7 @@ import EditProfile from '../home/EditProfile';
 import MealList from '../meal/list/MealList';
 import DiaryCalendar from '../diary/calendar/DiaryCalendar';
 import Aggregate from '../aggregate/Aggregate';
+import Assets from '../assets/Assets';
 import {
   selectMyProfile,
   selectIsLoadingAuth,
@@ -322,9 +323,9 @@ const Home: React.FC = () => {
                 }}
               >
                 <ListItemIcon>
-                  <AccountBalanceIcon className={activePage === 'assets' ? styles.home__active : ''} />
+                  <AccountBalanceIcon className={window.location.pathname === '/assets' ? styles.home__active : ''} />
                 </ListItemIcon>
-                <ListItemText primary='Assets' className={activePage === 'assets' ? styles.home__active : ''} />
+                <ListItemText primary='Assets' className={window.location.pathname === '/assets' ? styles.home__active : ''} />
               </ListItem>
             </Link>
           </List>
@@ -350,6 +351,9 @@ const Home: React.FC = () => {
                 </Route>
                 <Route path='/aggregate'>
                   <Aggregate />
+                </Route>
+                <Route path='/assets'>
+                  <Assets />
                 </Route>
               </Switch>
               :

@@ -3,6 +3,7 @@ import authReducer from '../features/auth/authSlice';
 import mealReducer from '../features/meal/mealSlice';
 import diaryReducer from '../features/diary/diarySlice';
 import aggregateReducer from '../features/aggregate/aggregateSlice';
+import assetsReducer from '../features/assets/assetsSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     meal: mealReducer,
     diary: diaryReducer,
     aggregate: aggregateReducer,
+    assets: assetsReducer,
   },
 });
 
